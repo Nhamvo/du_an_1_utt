@@ -1,0 +1,9 @@
+.env
+.env.*
+!.env.example
+node_modules
+dist
+.netlify
+.git
+data/uploads.json
+.DS_Store

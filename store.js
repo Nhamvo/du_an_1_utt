@@ -4,7 +4,7 @@ const fs = require("fs");
 const path = require("path");
 const crypto = require("crypto");
 
-const LOCAL = path.join(__dirname, "data", "uploads.json");
+const LOCAL = process.env.UPLOADS_FILE || path.join(__dirname, "data", "uploads.json");
 const KEY = "sources";
 const LIMITS = { name: 200, title: 200, text: 4000, pattern: 300, patterns: 20, answer: 4000, items: 3000 };
 

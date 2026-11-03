@@ -303,7 +303,7 @@
         : m.mode === "llm" ? `<span class="tag llm" title="${esc(m.model || "")}">AI + RAG</span>`
         : `<span class="tag" title="Trả lời bằng mô hình học máy đã huấn luyện">Học máy</span>`;
       const src = (m.sources || []).length ? `<span class="src"><b>Nguồn:</b> ${m.sources.map(esc).join(" · ")}</span>` : "";
-      foot.innerHTML = tag + (m.intent && !refuse ? `<span class="tag">${esc(m.intent)} · ${Math.round((m.score || 0) * 100)}%</span>` : "") + src +
+      foot.innerHTML = tag + (m.intent === "tro_chuyen" ? `<span class="tag">trò chuyện</span>` : m.intent && !refuse ? `<span class="tag">${esc(m.intent)} · ${Math.round((m.score || 0) * 100)}%</span>` : "") + src +
         `<span class="actions">
           <button class="icon-btn" data-a="copy" title="Sao chép" aria-label="Sao chép">${ICON.copy}</button>
           <button class="icon-btn" data-a="speak" title="Đọc to" aria-label="Đọc to">${ICON.speak}</button>
