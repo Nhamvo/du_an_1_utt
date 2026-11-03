@@ -1,0 +1,957 @@
+{
+  "school": "Trường Đại học Công nghệ Giao thông vận tải (UTT)",
+  "collected": "Thu thập 02/11/2026 từ utt.edu.vn/vn/tuyensinh, utt.edu.vn/vn/khoataichuc và hoctructuyen.utt.edu.vn",
+  "disclaimer": "Thông tin theo Thông báo tuyển sinh đào tạo từ xa năm 2026 của UTT. Vui lòng đối chiếu bản mới nhất tại utt.edu.vn/vn/tuyensinh.",
+  "greeting": "Xin chào! 👋 Mình là **chatbot hỗ trợ tư vấn tuyển sinh hệ Đại học từ xa – Trường Đại học Công nghệ Giao thông vận tải (UTT)**.\n\nNăm 2026, trường tuyển **1.000 chỉ tiêu** cho **9 ngành** đào tạo từ xa trên cả nước, nhận hồ sơ từ **10/01 đến 10/12/2026**.\n\nMình có thể hỗ trợ bạn 24/7 về:\n• Ngành đào tạo và hình thức học từ xa\n• Điều kiện, phương thức xét tuyển, hồ sơ, hạn nộp\n• Học phí, lệ phí, thời gian đào tạo, văn bằng\n• Gợi ý ngành phù hợp với bạn\n\nBạn cần tư vấn điều gì ạ?",
+  "suggestions": [
+    "Hệ từ xa học như thế nào?",
+    "Trường tuyển những ngành nào?",
+    "Điều kiện xét tuyển",
+    "Hồ sơ gồm những gì?",
+    "Hạn nộp hồ sơ",
+    "Gợi ý ngành cho tôi",
+    "Gặp tư vấn viên"
+  ],
+  "refuse_sensitive": "Xin lỗi, mình không thể trả lời nội dung này vì nằm ngoài phạm vi tư vấn tuyển sinh và có thể là chủ đề nhạy cảm. Mình chỉ hỗ trợ các câu hỏi về **tuyển sinh hệ Đại học từ xa của trường UTT** (ngành học, xét tuyển, hồ sơ, học phí, văn bằng…). Bạn có câu hỏi nào về tuyển sinh không ạ?",
+  "refuse_out_of_scope": "Xin lỗi, câu hỏi này nằm ngoài phạm vi tư vấn của mình. Mình chỉ trả lời các vấn đề về **tuyển sinh hệ Đại học từ xa – Trường Đại học Công nghệ GTVT**, ví dụ: ngành đào tạo, điều kiện xét tuyển, hồ sơ, hạn nộp, học phí, thời gian học, văn bằng. Bạn thử hỏi một trong các chủ đề này nhé!",
+  "sensitive_keywords": [
+    "chính trị",
+    "đảng phái",
+    "biểu tình",
+    "bầu cử",
+    "phản động",
+    "tôn giáo",
+    "chiến tranh",
+    "khủng bố",
+    "tình dục",
+    "sex",
+    "porn",
+    "khiêu dâm",
+    "ma túy",
+    "ma tuý",
+    "cần sa",
+    "vũ khí",
+    "súng",
+    "bom",
+    "thuốc nổ",
+    "hack",
+    "hacker",
+    "bẻ khóa",
+    "crack",
+    "lừa đảo",
+    "cờ bạc",
+    "cá độ",
+    "đánh bạc",
+    "tự tử",
+    "tự sát",
+    "giết",
+    "bạo lực",
+    "mua bằng",
+    "bằng giả",
+    "làm giả",
+    "chạy điểm",
+    "đi cửa sau",
+    "thi hộ",
+    "học hộ"
+  ],
+  "intents": [
+    {
+      "tag": "chao_hoi",
+      "patterns": [
+        "xin chào",
+        "chào bạn",
+        "hello",
+        "hi",
+        "chào ad",
+        "alo",
+        "có ai không",
+        "chào trường",
+        "bot ơi",
+        "chào em",
+        "chào buổi sáng",
+        "chào buổi tối",
+        "hey",
+        "mình cần tư vấn",
+        "em cần tư vấn tuyển sinh",
+        "tư vấn giúp em với",
+        "bạn là ai",
+        "bạn có thể làm gì",
+        "bot tư vấn gì được"
+      ],
+      "answer": "Chào bạn! Mình là trợ lý tư vấn tuyển sinh hệ Đại học từ xa của Trường Đại học Công nghệ GTVT. Bạn muốn tìm hiểu về ngành học, điều kiện xét tuyển, hồ sơ hay hạn nộp ạ?",
+      "source": ""
+    },
+    {
+      "tag": "gioi_thieu_truong",
+      "patterns": [
+        "giới thiệu về trường",
+        "trường utt là trường gì",
+        "trường công nghệ giao thông vận tải",
+        "trường có uy tín không",
+        "trường công lập hay tư thục",
+        "trường ở đâu",
+        "địa chỉ trường",
+        "mã trường là gì",
+        "trường có mấy cơ sở",
+        "cơ sở đào tạo của trường",
+        "đơn vị nào quản lý hệ từ xa",
+        "utt là viết tắt của gì",
+        "trường thuộc bộ nào",
+        "trường đại học công nghệ gtvt",
+        "cơ sở hà nội ở đâu",
+        "cơ sở phú thọ ở đâu",
+        "cơ sở vĩnh phúc",
+        "cơ sở thái nguyên ở đâu",
+        "viện đào tạo liên tục và từ xa",
+        "website của trường",
+        "trường có tốt không"
+      ],
+      "answer": "**Trường Đại học Công nghệ Giao thông vận tải (UTT)** – mã trường **GTA**, website utt.edu.vn.\nHệ đào tạo từ xa do **Viện Đào tạo liên tục và từ xa** quản lý, có 3 cơ sở:\n• **Hà Nội:** 54 Triều Khúc, phường Thanh Liệt, Hà Nội\n• **Phú Thọ:** 278 Lam Sơn, phường Vĩnh Yên, Phú Thọ\n• **Thái Nguyên:** 999 Phú Thái, phường Phan Đình Phùng, Thái Nguyên",
+      "source": "utt.edu.vn/vn/khoataichuc"
+    },
+    {
+      "tag": "hinh_thuc_tu_xa",
+      "patterns": [
+        "đại học từ xa là gì",
+        "hệ từ xa học như thế nào",
+        "học từ xa có phải lên lớp không",
+        "học online được không",
+        "hình thức học từ xa",
+        "học trực tuyến",
+        "vừa đi làm vừa học được không",
+        "có phải đến trường không",
+        "học qua mạng",
+        "elearning",
+        "học trên lms",
+        "học từ xa có khó không",
+        "học ở trang nào",
+        "học từ xa là học thế nào",
+        "có cần lên trường học không",
+        "học trên điện thoại được không",
+        "ở tỉnh xa có học được không",
+        "học từ xa có giảng viên không",
+        "hoctructuyen là gì",
+        "học từ xa khác gì học chính quy",
+        "đang ở nước ngoài có học được không",
+        "học tại nhà được không"
+      ],
+      "answer": "**Đào tạo đại học từ xa** tại UTT học chủ yếu **trực tuyến** trên hệ thống **hoctructuyen.utt.edu.vn**, phù hợp người vừa đi làm vừa học:\n• Vào lớp học trực tuyến, xem bài giảng, làm bài tập mọi lúc mọi nơi\n• Theo dõi lịch học, ca thi, bảng điểm, kết quả miễn môn ngay trên hệ thống\n• Chỉ cần máy tính hoặc điện thoại có Internet\n\nHệ từ xa thực hiện theo **Quy chế đào tạo từ xa của trường (QĐ 1545 ngày 12/3/2025)**, căn cứ Thông tư 28/2023/TT-BGDĐT của Bộ GD&ĐT.",
+      "source": "hoctructuyen.utt.edu.vn; QĐ 1545/2025 – utt.edu.vn/vn/khoataichuc"
+    },
+    {
+      "tag": "nganh_dao_tao",
+      "patterns": [
+        "trường có những ngành nào",
+        "ngành đào tạo từ xa",
+        "danh sách ngành",
+        "học ngành gì",
+        "các ngành tuyển sinh",
+        "chỉ tiêu bao nhiêu",
+        "mã ngành",
+        "tuyển bao nhiêu người",
+        "trường đào tạo ngành gì",
+        "có bao nhiêu ngành",
+        "năm 2026 tuyển ngành nào",
+        "danh sách mã ngành",
+        "tổng chỉ tiêu",
+        "ngành nào nhiều chỉ tiêu nhất",
+        "có ngành marketing không",
+        "có ngành luật không",
+        "có ngành ngôn ngữ anh không"
+      ],
+      "answer": "**9 ngành tuyển sinh Đại học từ xa năm 2026 (tổng 1.000 chỉ tiêu):**\n1. Công nghệ kỹ thuật giao thông (Cầu đường bộ; Cầu – Đường sắt) – 7510104 – 350\n2. CNKT Công trình xây dựng dân dụng và công nghiệp – 7510102 – 220\n3. Công nghệ kỹ thuật ô tô – 7510205 – 120\n4. Công nghệ thông tin – 7480201 – 90\n5. Logistics và Quản lý chuỗi cung ứng – 7510605 – 50\n6. Quản lý xây dựng – 7580302 – 50\n7. Quản lý và Điều hành vận tải đường sắt – 7840101 – 40\n8. Kế toán doanh nghiệp – 7340301 – 40\n9. Quản trị doanh nghiệp – 7340101 – 40\n\nBạn quan tâm ngành nào để mình tư vấn thêm?",
+      "source": "Thông báo tuyển sinh đào tạo từ xa trình độ đại học năm 2026"
+    },
+    {
+      "tag": "dieu_kien_xet_tuyen",
+      "patterns": [
+        "điều kiện xét tuyển",
+        "điều kiện đầu vào",
+        "ai được đăng ký học",
+        "có cần thi đầu vào không",
+        "có phải thi đầu vào không",
+        "xét tuyển như thế nào",
+        "phương thức tuyển sinh",
+        "tốt nghiệp thpt có học được không",
+        "đã có bằng trung cấp có học được không",
+        "có xét học bạ không",
+        "đối tượng tuyển sinh",
+        "điểm chuẩn bao nhiêu",
+        "tuyển thẳng",
+        "xét điểm thi tốt nghiệp",
+        "có giới hạn tuổi không",
+        "bao nhiêu tuổi thì học được",
+        "lớn tuổi có học được không",
+        "không có bằng cấp 3 có học được không",
+        "học hết lớp 12 chưa thi tốt nghiệp",
+        "xét theo điểm đánh giá năng lực",
+        "xét tuyển kết hợp là gì",
+        "có cần giấy khám sức khỏe không",
+        "bổ túc có được học không",
+        "ai được tuyển thẳng",
+        "điểm trúng tuyển tính thế nào",
+        "bao nhiêu điểm thì đỗ"
+      ],
+      "answer": "**Đối tượng:** người đã tốt nghiệp THPT (chính quy hoặc thường xuyên), hoặc đã có bằng trung cấp, cao đẳng, đại học; đủ sức khỏe theo quy định. Tuyển sinh **trong cả nước**, **không thi đầu vào**.\n\n**Phương thức xét tuyển:**\n• **Tuyển thẳng:** người đã có bằng đại học\n• **Có bằng TC/CĐ cùng lĩnh vực:** xét kết quả 2 môn cơ sở ngành và chuyên ngành\n• **Có bằng TC/CĐ khác lĩnh vực hoặc tốt nghiệp THPT/THBT:** xét điểm thi tốt nghiệp THPT, ĐGNL, ĐGTD cùng năm, **hoặc xét học bạ**\n\nĐiểm trúng tuyển lấy từ cao xuống thấp đến khi đủ chỉ tiêu từng ngành.",
+      "source": "Thông báo tuyển sinh đào tạo từ xa trình độ đại học năm 2026"
+    },
+    {
+      "tag": "lien_thong_vb2",
+      "patterns": [
+        "học liên thông",
+        "văn bằng 2",
+        "đã có bằng đại học muốn học thêm",
+        "liên thông từ cao đẳng lên đại học",
+        "từ trung cấp lên đại học",
+        "được miễn môn không",
+        "bảo lưu điểm",
+        "chuyển đổi tín chỉ",
+        "đã có bằng cao đẳng",
+        "có bằng trung cấp học mấy năm",
+        "liên thông mất bao lâu",
+        "học văn bằng 2 mất bao lâu",
+        "đã tốt nghiệp đại học khác ngành",
+        "được miễn những môn nào",
+        "kết quả miễn môn xem ở đâu",
+        "cao đẳng cùng ngành xét thế nào",
+        "cao đẳng khác ngành có học được không"
+      ],
+      "answer": "Với người đã có bằng **trung cấp, cao đẳng hoặc đại học**:\n• Có bằng **đại học**: được **tuyển thẳng**\n• Có bằng **TC/CĐ cùng lĩnh vực**: xét kết quả 2 môn cơ sở ngành và chuyên ngành\n• Thời gian học rút ngắn tùy trình độ đầu vào (toàn khóa từ 2 đến 5 năm)\n• Học phần đã học có thể được xét **miễn môn**; kết quả xem tại mục \"Kết quả miễn môn\" trên hoctructuyen.utt.edu.vn\n\nKhi nộp hồ sơ cần thêm bản sao công chứng bằng và bảng điểm/phụ lục văn bằng TC, CĐ, ĐH.",
+      "source": "Thông báo tuyển sinh đào tạo từ xa năm 2026; hoctructuyen.utt.edu.vn"
+    },
+    {
+      "tag": "ho_so",
+      "patterns": [
+        "hồ sơ gồm những gì",
+        "cần chuẩn bị giấy tờ gì",
+        "hồ sơ đăng ký",
+        "giấy tờ nhập học",
+        "có cần công chứng không",
+        "ảnh thẻ cỡ nào",
+        "nộp hồ sơ gì",
+        "thủ tục hồ sơ",
+        "sơ yếu lý lịch",
+        "hồ sơ cần những giấy tờ nào",
+        "có cần giấy khai sinh không",
+        "cần mấy ảnh",
+        "có cần chứng chỉ tiếng anh không",
+        "chứng chỉ tin học có bắt buộc không",
+        "sơ yếu lý lịch xin xác nhận ở đâu",
+        "hồ sơ có cần bản gốc không",
+        "học bạ có cần công chứng không",
+        "căn cước công dân"
+      ],
+      "answer": "**Hồ sơ đăng ký (bản cứng nộp tại Bộ phận tuyển sinh):**\n1. Sơ yếu lý lịch theo mẫu, dán ảnh, có xác nhận của địa phương hoặc cơ quan công tác\n2. Bản sao công chứng bằng tốt nghiệp THPT, TCCN, CĐ, ĐH\n3. Bản sao công chứng học bạ THPT và bảng điểm/phụ lục văn bằng TCCN, CĐ, ĐH\n4. Chứng chỉ Tin học, tiếng Anh hoặc ngoại ngữ khác (nếu có)\n5. Bản sao công chứng giấy khai sinh hoặc căn cước công dân\n6. 02 ảnh 3x4, mặt sau ghi họ tên, ngày sinh, nơi sinh\n\nNgoài ra đăng ký trực tuyến tại https://by.tn/U8XF.",
+      "source": "Thông báo tuyển sinh đào tạo từ xa trình độ đại học năm 2026"
+    },
+    {
+      "tag": "quy_trinh_dang_ky",
+      "patterns": [
+        "đăng ký như thế nào",
+        "các bước đăng ký",
+        "đăng ký online được không",
+        "nộp hồ sơ ở đâu",
+        "cách đăng ký xét tuyển",
+        "quy trình nhập học",
+        "đăng ký trực tuyến",
+        "link đăng ký",
+        "nộp hồ sơ ngày nào trong tuần",
+        "đăng ký học từ xa ở đâu",
+        "đăng ký qua mạng",
+        "nộp hồ sơ online",
+        "có nộp qua bưu điện được không",
+        "thứ bảy có nhận hồ sơ không",
+        "phòng tuyển sinh ở phòng nào",
+        "nộp hồ sơ tại hà nội ở đâu",
+        "nộp hồ sơ tại thái nguyên",
+        "nộp hồ sơ tại phú thọ",
+        "xettuyen utt"
+      ],
+      "answer": "**Quy trình đăng ký học hệ từ xa:**\n1. Đăng ký trực tuyến tại **https://by.tn/U8XF** (hoặc xettuyen.utt.edu.vn)\n2. Nộp hồ sơ bản cứng và lệ phí xét tuyển 100.000đ tại một trong 3 cơ sở, **thứ Hai – thứ Sáu**:\n   • Hà Nội: Phòng 104, Nhà H1, 54 Triều Khúc\n   • Phú Thọ: Phòng 204, Nhà B3, 278 Lam Sơn, Vĩnh Yên\n   • Thái Nguyên: Phòng 104, Nhà Hiệu bộ, 999 Phú Thái\n3. Nhà trường xét tuyển theo đợt và gửi kết quả trúng tuyển\n4. Nhập học, nhận tài khoản học trên hoctructuyen.utt.edu.vn",
+      "source": "Thông báo tuyển sinh đào tạo từ xa trình độ đại học năm 2026"
+    },
+    {
+      "tag": "han_nop",
+      "patterns": [
+        "hạn nộp hồ sơ",
+        "khi nào hết hạn",
+        "bao giờ tuyển sinh",
+        "mấy đợt tuyển sinh",
+        "lịch tuyển sinh",
+        "khi nào nhập học",
+        "khai giảng khi nào",
+        "còn kịp đăng ký không",
+        "đợt xét tuyển",
+        "thời gian nhận hồ sơ",
+        "bao giờ hết hạn nhận hồ sơ",
+        "đợt tiếp theo là khi nào",
+        "tháng mấy xét tuyển",
+        "tháng 12 còn nộp được không",
+        "đợt tháng 11",
+        "năm 2026 có mấy đợt",
+        "bao giờ có kết quả",
+        "khi nào biết trúng tuyển",
+        "nộp muộn có được không"
+      ],
+      "answer": "**Thời gian tuyển sinh 2026:**\n• Phát hành và nhận hồ sơ: **10/01/2026 – 10/12/2026**\n• Dự kiến **4 đợt xét tuyển**: tháng **3, 5, 8 và 11**\n• Nhận hồ sơ từ **thứ Hai đến thứ Sáu** hàng tuần tại các cơ sở\n\nBạn nộp càng sớm thì càng được xét ở đợt gần nhất.",
+      "source": "Thông báo tuyển sinh đào tạo từ xa trình độ đại học năm 2026"
+    },
+    {
+      "tag": "hoc_phi",
+      "patterns": [
+        "học phí bao nhiêu",
+        "học phí một tín chỉ",
+        "chi phí học",
+        "tiền học",
+        "đóng học phí như thế nào",
+        "học phí có đắt không",
+        "có được trả góp không",
+        "phí xét tuyển",
+        "lệ phí bao nhiêu",
+        "học phí một kỳ",
+        "học phí từ xa bao nhiêu tiền",
+        "học phí có cao không",
+        "mất bao nhiêu tiền",
+        "học phí theo tín chỉ",
+        "lệ phí xét tuyển bao nhiêu",
+        "đóng tiền ở đâu",
+        "có phải đóng tiền hồ sơ không",
+        "tổng chi phí khóa học",
+        "học phí liên thông"
+      ],
+      "answer": "**Lệ phí và học phí:**\n• Lệ phí đăng ký xét tuyển: **100.000đ**\n• Học phí: **theo quy định của Bộ Giáo dục và Đào tạo**, thông báo cụ thể khi nhập học\n\nThông báo tuyển sinh không công bố con số học phí, nên mình không báo con số để tránh sai lệch. Bạn gõ \"gặp tư vấn viên\" để nhận mức học phí chính xác cho ngành của mình nhé.",
+      "source": "Thông báo tuyển sinh đào tạo từ xa trình độ đại học năm 2026"
+    },
+    {
+      "tag": "thoi_gian_dao_tao",
+      "patterns": [
+        "học bao lâu",
+        "thời gian đào tạo",
+        "mấy năm thì ra trường",
+        "bao nhiêu tín chỉ",
+        "có học nhanh được không",
+        "rút ngắn thời gian",
+        "thời gian tối đa",
+        "học mấy năm",
+        "bao lâu thì tốt nghiệp",
+        "học từ xa mất mấy năm",
+        "có bằng cao đẳng học bao lâu",
+        "tốt nghiệp thpt học mấy năm",
+        "học nhanh nhất mấy năm",
+        "học lâu nhất mấy năm"
+      ],
+      "answer": "**Thời gian đào tạo:** từ **2 đến 5 năm**, tùy trình độ đầu vào:\n• Tốt nghiệp THPT: học toàn khóa (thời gian dài nhất)\n• Đã có bằng TC, CĐ, ĐH: được xét miễn học phần nên rút ngắn còn khoảng 2–3 năm",
+      "source": "Thông báo tuyển sinh đào tạo từ xa trình độ đại học năm 2026"
+    },
+    {
+      "tag": "van_bang",
+      "patterns": [
+        "bằng từ xa có giá trị không",
+        "bằng có ghi hệ từ xa không",
+        "bằng có được công nhận không",
+        "bằng từ xa có thi công chức được không",
+        "có học thạc sĩ được không",
+        "văn bằng tốt nghiệp",
+        "bằng cấp như thế nào",
+        "bằng có giống chính quy không",
+        "tra cứu văn bằng",
+        "bằng có giá trị như chính quy không",
+        "bằng từ xa có bị coi thường không",
+        "có được học lên cao học không",
+        "bằng có ghi hình thức đào tạo không",
+        "bằng do ai cấp",
+        "bằng kỹ sư hay cử nhân",
+        "có xin việc nhà nước được không"
+      ],
+      "answer": "**Văn bằng tốt nghiệp:**\n• Người học đủ điều kiện được cấp bằng đại học do **Trường Đại học Công nghệ GTVT** cấp\n• Theo Luật Giáo dục đại học sửa đổi 2018, văn bằng **có giá trị pháp lý như nhau** giữa các hình thức đào tạo\n• Có thể dùng để thi công chức, học tiếp thạc sĩ theo quy định\n• Tra cứu văn bằng tại tracuuvanbang.utt.edu.vn",
+      "source": "Luật Giáo dục đại học (sửa đổi 2018); utt.edu.vn"
+    },
+    {
+      "tag": "lich_hoc_thi",
+      "patterns": [
+        "lịch học thế nào",
+        "học buổi tối được không",
+        "thi ở đâu",
+        "thi online hay offline",
+        "có phải thi tập trung không",
+        "học cuối tuần",
+        "bị trượt môn thì sao",
+        "thi lại",
+        "xem lịch thi",
+        "xem điểm ở đâu",
+        "học giờ nào",
+        "có lớp học online trực tiếp không",
+        "thi có phải lên trường không",
+        "xem lịch học ở đâu",
+        "xem ca thi ở đâu",
+        "xem bảng điểm",
+        "trượt môn phải học lại không",
+        "thi cuối kỳ thế nào"
+      ],
+      "answer": "**Lịch học và thi:**\n• Lịch học, ca thi, bảng điểm được cập nhật trên **hoctructuyen.utt.edu.vn** (mục Lịch học, Ca thi, Quản lý điểm)\n• Học trực tuyến linh hoạt, phù hợp người đi làm\n• Kiểm tra, thi và học lại/thi lại thực hiện theo Quy chế đào tạo từ xa của trường (QĐ 1545/2025)",
+      "source": "hoctructuyen.utt.edu.vn; QĐ 1545/2025"
+    },
+    {
+      "tag": "goi_y_nganh",
+      "patterns": [
+        "gợi ý ngành cho tôi",
+        "nên học ngành gì",
+        "tư vấn chọn ngành",
+        "ngành nào phù hợp với tôi",
+        "tôi thích lập trình",
+        "tôi thích máy tính",
+        "tôi làm kế toán",
+        "tôi thích kinh doanh",
+        "tôi đang làm xây dựng",
+        "tôi làm kho vận",
+        "tôi thích quản lý",
+        "tôi làm xuất nhập khẩu",
+        "tôi làm sửa xe ô tô",
+        "tôi làm ngành đường sắt",
+        "tôi không biết chọn ngành nào",
+        "ngành nào dễ xin việc",
+        "ngành nào hợp với người đi làm",
+        "tôi đang làm công ty xây dựng",
+        "tôi làm lái xe",
+        "tôi làm văn phòng",
+        "tôi làm nhân viên kho",
+        "tôi thích công nghệ",
+        "em làm kỹ thuật cầu đường",
+        "em làm ở ga tàu"
+      ],
+      "answer": "Để gợi ý ngành phù hợp, bạn cho mình biết **công việc hiện tại hoặc sở thích** nhé, ví dụ:\n• \"Tôi thích lập trình / máy tính\"\n• \"Tôi đang làm kế toán\"\n• \"Tôi thích kinh doanh, quản lý\"\n• \"Tôi làm xây dựng / cầu đường\"\n• \"Tôi làm sửa chữa ô tô\"\n• \"Tôi làm kho vận, xuất nhập khẩu\"",
+      "source": "",
+      "suggest": [
+        {
+          "keywords": [
+            "lập trình",
+            "máy tính",
+            "phần mềm",
+            "công nghệ",
+            "it",
+            "code",
+            "mạng"
+          ],
+          "major": "**Công nghệ thông tin** (7480201) – cho người thích máy tính, lập trình, quản trị hệ thống."
+        },
+        {
+          "keywords": [
+            "kế toán",
+            "tài chính",
+            "thuế",
+            "sổ sách"
+          ],
+          "major": "**Kế toán doanh nghiệp** (7340301) – cho người làm kế toán, tài chính."
+        },
+        {
+          "keywords": [
+            "kinh doanh",
+            "quản lý",
+            "bán hàng",
+            "marketing",
+            "khởi nghiệp",
+            "doanh nghiệp"
+          ],
+          "major": "**Quản trị doanh nghiệp** (7340101) – cho người làm kinh doanh, quản lý."
+        },
+        {
+          "keywords": [
+            "cầu",
+            "đường",
+            "cầu đường",
+            "giao thông"
+          ],
+          "major": "**Công nghệ kỹ thuật giao thông** (7510104) – Cầu đường bộ, Cầu – Đường sắt, thế mạnh của trường."
+        },
+        {
+          "keywords": [
+            "xây dựng",
+            "công trình",
+            "nhà",
+            "dân dụng"
+          ],
+          "major": "**CNKT Công trình xây dựng dân dụng và công nghiệp** (7510102) hoặc **Quản lý xây dựng** (7580302)."
+        },
+        {
+          "keywords": [
+            "ô tô",
+            "xe",
+            "sửa xe",
+            "cơ khí",
+            "garage"
+          ],
+          "major": "**Công nghệ kỹ thuật ô tô** (7510205) – cho người làm sửa chữa, kỹ thuật ô tô."
+        },
+        {
+          "keywords": [
+            "đường sắt",
+            "tàu hỏa",
+            "nhà ga"
+          ],
+          "major": "**Quản lý và Điều hành vận tải đường sắt** (7840101)."
+        },
+        {
+          "keywords": [
+            "kho",
+            "vận tải",
+            "logistics",
+            "xuất nhập khẩu",
+            "chuỗi cung ứng",
+            "giao nhận"
+          ],
+          "major": "**Logistics và Quản lý chuỗi cung ứng** (7510605) – cho người làm kho vận, giao nhận, xuất nhập khẩu."
+        }
+      ]
+    },
+    {
+      "tag": "tu_van_vien",
+      "patterns": [
+        "gặp tư vấn viên",
+        "tôi muốn nói chuyện với người thật",
+        "cho tôi số điện thoại",
+        "liên hệ tư vấn",
+        "hotline",
+        "cần người hỗ trợ",
+        "gọi điện tư vấn",
+        "liên hệ phòng tuyển sinh",
+        "email tuyển sinh",
+        "số điện thoại tuyển sinh",
+        "số điện thoại cơ sở hà nội",
+        "số điện thoại cơ sở thái nguyên",
+        "số điện thoại cơ sở phú thọ",
+        "gọi ai để hỏi",
+        "liên hệ cô ly",
+        "tôi muốn được gọi lại",
+        "nói chuyện với nhân viên",
+        "cần hỗ trợ trực tiếp",
+        "zalo tư vấn"
+      ],
+      "answer": "Để được tư vấn viên hỗ trợ trực tiếp, bạn liên hệ Bộ phận tuyển sinh hệ từ xa (giờ hành chính, thứ Hai – thứ Sáu):\n• **Hà Nội** (P.104, Nhà H1, 54 Triều Khúc): 0243.8548718; 097.209.1290 (cô Ly); 097.853.7248 (thầy Hoàng Tuấn); 096.606.0713 (cô Huyền)\n• **Phú Thọ** (P.204, Nhà B3, 278 Lam Sơn, Vĩnh Yên): 0211.3712296; 096.951.1225 (cô Giang)\n• **Thái Nguyên** (P.104, Nhà Hiệu bộ, 999 Phú Thái): 0982.148.991 (thầy Lý)\n• Hotline tuyển sinh chung: 0243.552.6713",
+      "source": "Thông báo tuyển sinh đào tạo từ xa năm 2026; utt.edu.vn/vn/tuyensinh"
+    },
+    {
+      "tag": "cam_on",
+      "patterns": [
+        "cảm ơn",
+        "cám ơn bạn",
+        "thanks",
+        "thank you",
+        "ok cảm ơn",
+        "tạm biệt",
+        "bye",
+        "hiểu rồi",
+        "cảm ơn nhiều",
+        "ok",
+        "được rồi",
+        "cảm ơn bot",
+        "thanks bạn",
+        "mình hiểu rồi cảm ơn"
+      ],
+      "answer": "Cảm ơn bạn đã quan tâm đến hệ Đại học từ xa của Trường Đại học Công nghệ GTVT! Chúc bạn sớm chọn được ngành phù hợp. Nếu còn thắc mắc, cứ nhắn mình bất cứ lúc nào nhé 😊",
+      "source": ""
+    },
+    {
+      "tag": "nganh_cntt",
+      "patterns": [
+        "ngành công nghệ thông tin",
+        "ngành cntt học từ xa",
+        "mã ngành công nghệ thông tin",
+        "chỉ tiêu ngành cntt",
+        "học it từ xa",
+        "ngành công nghệ thông tin học những gì",
+        "có ngành công nghệ thông tin không"
+      ],
+      "answer": "**Ngành Công nghệ thông tin**\n• Mã ngành: **7480201**\n• Chỉ tiêu đào tạo từ xa 2026: **90**\n• Phù hợp với: người thích máy tính, lập trình, quản trị hệ thống\n• Thời gian đào tạo: 2–5 năm tùy trình độ đầu vào\n• Xét tuyển: tuyển thẳng nếu có bằng ĐH; còn lại xét bằng TC/CĐ, điểm thi tốt nghiệp THPT, ĐGNL, ĐGTD hoặc học bạ\n\nBạn muốn biết hồ sơ hay hạn nộp cho ngành này không?",
+      "source": "Thông báo tuyển sinh đào tạo từ xa trình độ đại học năm 2026"
+    },
+    {
+      "tag": "nganh_giao_thong",
+      "patterns": [
+        "ngành công nghệ kỹ thuật giao thông",
+        "ngành cầu đường bộ",
+        "ngành xây dựng cầu đường",
+        "ngành cầu đường sắt",
+        "chỉ tiêu ngành cầu đường",
+        "mã ngành 7510104"
+      ],
+      "answer": "**Ngành Công nghệ kỹ thuật giao thông (chuyên ngành CNKT Xây dựng Cầu đường bộ; Xây dựng Cầu – Đường sắt)**\n• Mã ngành: **7510104**\n• Chỉ tiêu đào tạo từ xa 2026: **350**\n• Phù hợp với: người làm kỹ thuật cầu đường, thi công công trình giao thông – đây là ngành nhiều chỉ tiêu nhất\n• Thời gian đào tạo: 2–5 năm tùy trình độ đầu vào\n• Xét tuyển: tuyển thẳng nếu có bằng ĐH; còn lại xét bằng TC/CĐ, điểm thi tốt nghiệp THPT, ĐGNL, ĐGTD hoặc học bạ\n\nBạn muốn biết hồ sơ hay hạn nộp cho ngành này không?",
+      "source": "Thông báo tuyển sinh đào tạo từ xa trình độ đại học năm 2026"
+    },
+    {
+      "tag": "nganh_dan_dung",
+      "patterns": [
+        "ngành xây dựng dân dụng",
+        "ngành xây dựng dân dụng và công nghiệp",
+        "công trình xây dựng dân dụng",
+        "chỉ tiêu ngành xây dựng dân dụng",
+        "mã ngành 7510102",
+        "ngành xây dựng có học từ xa không"
+      ],
+      "answer": "**Ngành CNKT Công trình xây dựng dân dụng và công nghiệp**\n• Mã ngành: **7510102**\n• Chỉ tiêu đào tạo từ xa 2026: **220**\n• Phù hợp với: người làm thi công, giám sát nhà ở, nhà xưởng\n• Thời gian đào tạo: 2–5 năm tùy trình độ đầu vào\n• Xét tuyển: tuyển thẳng nếu có bằng ĐH; còn lại xét bằng TC/CĐ, điểm thi tốt nghiệp THPT, ĐGNL, ĐGTD hoặc học bạ\n\nBạn muốn biết hồ sơ hay hạn nộp cho ngành này không?",
+      "source": "Thông báo tuyển sinh đào tạo từ xa trình độ đại học năm 2026"
+    },
+    {
+      "tag": "nganh_o_to",
+      "patterns": [
+        "ngành công nghệ kỹ thuật ô tô",
+        "ngành ô tô học từ xa",
+        "chỉ tiêu ngành ô tô",
+        "mã ngành ô tô",
+        "học sửa chữa ô tô",
+        "có ngành ô tô không"
+      ],
+      "answer": "**Ngành Công nghệ kỹ thuật ô tô**\n• Mã ngành: **7510205**\n• Chỉ tiêu đào tạo từ xa 2026: **120**\n• Phù hợp với: người làm sửa chữa, bảo dưỡng, kỹ thuật ô tô\n• Thời gian đào tạo: 2–5 năm tùy trình độ đầu vào\n• Xét tuyển: tuyển thẳng nếu có bằng ĐH; còn lại xét bằng TC/CĐ, điểm thi tốt nghiệp THPT, ĐGNL, ĐGTD hoặc học bạ\n\nBạn muốn biết hồ sơ hay hạn nộp cho ngành này không?",
+      "source": "Thông báo tuyển sinh đào tạo từ xa trình độ đại học năm 2026"
+    },
+    {
+      "tag": "nganh_logistics",
+      "patterns": [
+        "ngành logistics và quản lý chuỗi cung ứng",
+        "ngành chuỗi cung ứng",
+        "chỉ tiêu ngành logistics",
+        "mã ngành logistics",
+        "học logistics từ xa",
+        "ngành logistics"
+      ],
+      "answer": "**Ngành Logistics và Quản lý chuỗi cung ứng**\n• Mã ngành: **7510605**\n• Chỉ tiêu đào tạo từ xa 2026: **50**\n• Phù hợp với: người làm kho vận, giao nhận, xuất nhập khẩu\n• Thời gian đào tạo: 2–5 năm tùy trình độ đầu vào\n• Xét tuyển: tuyển thẳng nếu có bằng ĐH; còn lại xét bằng TC/CĐ, điểm thi tốt nghiệp THPT, ĐGNL, ĐGTD hoặc học bạ\n\nBạn muốn biết hồ sơ hay hạn nộp cho ngành này không?",
+      "source": "Thông báo tuyển sinh đào tạo từ xa trình độ đại học năm 2026"
+    },
+    {
+      "tag": "nganh_quan_ly_xd",
+      "patterns": [
+        "ngành quản lý xây dựng",
+        "chỉ tiêu ngành quản lý xây dựng",
+        "mã ngành quản lý xây dựng",
+        "học quản lý dự án xây dựng"
+      ],
+      "answer": "**Ngành Quản lý xây dựng**\n• Mã ngành: **7580302**\n• Chỉ tiêu đào tạo từ xa 2026: **50**\n• Phù hợp với: người làm quản lý dự án, hồ sơ, chi phí xây dựng\n• Thời gian đào tạo: 2–5 năm tùy trình độ đầu vào\n• Xét tuyển: tuyển thẳng nếu có bằng ĐH; còn lại xét bằng TC/CĐ, điểm thi tốt nghiệp THPT, ĐGNL, ĐGTD hoặc học bạ\n\nBạn muốn biết hồ sơ hay hạn nộp cho ngành này không?",
+      "source": "Thông báo tuyển sinh đào tạo từ xa trình độ đại học năm 2026"
+    },
+    {
+      "tag": "nganh_duong_sat",
+      "patterns": [
+        "ngành quản lý và điều hành vận tải đường sắt",
+        "ngành vận tải đường sắt",
+        "ngành điều hành đường sắt",
+        "chỉ tiêu ngành đường sắt",
+        "mã ngành đường sắt",
+        "ngành đường sắt"
+      ],
+      "answer": "**Ngành Quản lý và Điều hành vận tải đường sắt**\n• Mã ngành: **7840101**\n• Chỉ tiêu đào tạo từ xa 2026: **40**\n• Phù hợp với: người làm trong ngành đường sắt, nhà ga, điều độ chạy tàu\n• Thời gian đào tạo: 2–5 năm tùy trình độ đầu vào\n• Xét tuyển: tuyển thẳng nếu có bằng ĐH; còn lại xét bằng TC/CĐ, điểm thi tốt nghiệp THPT, ĐGNL, ĐGTD hoặc học bạ\n\nBạn muốn biết hồ sơ hay hạn nộp cho ngành này không?",
+      "source": "Thông báo tuyển sinh đào tạo từ xa trình độ đại học năm 2026"
+    },
+    {
+      "tag": "nganh_ke_toan",
+      "patterns": [
+        "ngành kế toán doanh nghiệp",
+        "ngành kế toán học từ xa",
+        "chỉ tiêu ngành kế toán",
+        "mã ngành kế toán",
+        "có ngành kế toán không"
+      ],
+      "answer": "**Ngành Kế toán doanh nghiệp**\n• Mã ngành: **7340301**\n• Chỉ tiêu đào tạo từ xa 2026: **40**\n• Phù hợp với: người làm kế toán, tài chính doanh nghiệp\n• Thời gian đào tạo: 2–5 năm tùy trình độ đầu vào\n• Xét tuyển: tuyển thẳng nếu có bằng ĐH; còn lại xét bằng TC/CĐ, điểm thi tốt nghiệp THPT, ĐGNL, ĐGTD hoặc học bạ\n\nBạn muốn biết hồ sơ hay hạn nộp cho ngành này không?",
+      "source": "Thông báo tuyển sinh đào tạo từ xa trình độ đại học năm 2026"
+    },
+    {
+      "tag": "nganh_qtdn",
+      "patterns": [
+        "ngành quản trị doanh nghiệp",
+        "ngành quản trị kinh doanh",
+        "chỉ tiêu ngành quản trị",
+        "mã ngành quản trị doanh nghiệp",
+        "có ngành quản trị không"
+      ],
+      "answer": "**Ngành Quản trị doanh nghiệp**\n• Mã ngành: **7340101**\n• Chỉ tiêu đào tạo từ xa 2026: **40**\n• Phù hợp với: người làm kinh doanh, quản lý\n• Thời gian đào tạo: 2–5 năm tùy trình độ đầu vào\n• Xét tuyển: tuyển thẳng nếu có bằng ĐH; còn lại xét bằng TC/CĐ, điểm thi tốt nghiệp THPT, ĐGNL, ĐGTD hoặc học bạ\n\nBạn muốn biết hồ sơ hay hạn nộp cho ngành này không?",
+      "source": "Thông báo tuyển sinh đào tạo từ xa trình độ đại học năm 2026"
+    },
+    {
+      "tag": "thiet_bi_hoc",
+      "patterns": [
+        "cần chuẩn bị máy tính gì",
+        "học bằng điện thoại được không",
+        "cần mạng internet không",
+        "cần cài phần mềm gì",
+        "đăng nhập hệ thống học thế nào",
+        "tài khoản học trực tuyến",
+        "quên mật khẩu hoctructuyen",
+        "không vào được lớp học"
+      ],
+      "answer": "**Để học từ xa bạn cần:**\n• Máy tính hoặc điện thoại có kết nối Internet ổn định\n• Trình duyệt web để vào **hoctructuyen.utt.edu.vn**\n• Tài khoản học tập do trường cấp sau khi nhập học\n\nTrên hệ thống có: Danh sách lớp, Lịch học, Ca thi, Quản lý điểm, Kết quả miễn môn, Chứng chỉ được cấp và Hướng dẫn sử dụng. Nếu gặp sự cố đăng nhập, bạn liên hệ cơ sở đã nộp hồ sơ.",
+      "source": "hoctructuyen.utt.edu.vn"
+    },
+    {
+      "tag": "so_sanh_he",
+      "patterns": [
+        "từ xa khác vừa làm vừa học thế nào",
+        "nên học từ xa hay vừa làm vừa học",
+        "từ xa và chính quy khác gì",
+        "trường có những hệ đào tạo nào",
+        "có hệ vừa làm vừa học không",
+        "có hệ liên thông không",
+        "có đào tạo sau đại học không",
+        "hệ nào phù hợp người đi làm"
+      ],
+      "answer": "Trường Đại học Công nghệ GTVT có các hệ: **Đại học chính quy**, **Liên thông – Văn bằng 2 – Vừa làm vừa học**, **Đào tạo từ xa**, **Sau đại học** và **Đào tạo quốc tế**.\n\n**Hệ từ xa** học chủ yếu trực tuyến trên hoctructuyen.utt.edu.vn nên phù hợp nhất với người đi làm hoặc ở xa cơ sở đào tạo. Hệ vừa làm vừa học thường học tập trung tại cơ sở theo lịch riêng. Mình chuyên tư vấn hệ từ xa; các hệ khác bạn xem tại utt.edu.vn/vn/tuyensinh.",
+      "source": "utt.edu.vn/vn/tuyensinh"
+    },
+    {
+      "tag": "hoc_bong_mien_giam",
+      "patterns": [
+        "có học bổng không",
+        "có miễn giảm học phí không",
+        "chế độ chính sách",
+        "con thương binh có được giảm học phí",
+        "hộ nghèo có được miễn học phí",
+        "có được vay vốn sinh viên không",
+        "ưu đãi học phí"
+      ],
+      "answer": "Thông báo tuyển sinh đào tạo từ xa năm 2026 **không đề cập học bổng hoặc chính sách miễn giảm học phí**. Để tránh thông tin sai, mình không khẳng định điều này. Bạn vui lòng liên hệ tư vấn viên (gõ \"gặp tư vấn viên\") để được hướng dẫn theo trường hợp cụ thể.",
+      "source": "Thông báo tuyển sinh đào tạo từ xa trình độ đại học năm 2026"
+    },
+    {
+      "tag": "ket_qua_trung_tuyen",
+      "patterns": [
+        "khi nào có kết quả xét tuyển",
+        "làm sao biết mình đỗ",
+        "giấy báo trúng tuyển",
+        "tra cứu kết quả",
+        "trúng tuyển rồi làm gì",
+        "nhập học cần mang gì",
+        "sau khi trúng tuyển"
+      ],
+      "answer": "Năm 2026 trường dự kiến xét tuyển **4 đợt vào tháng 3, 5, 8 và 11**. Sau mỗi đợt, kết quả được thông báo tới thí sinh đã nộp hồ sơ. Khi trúng tuyển, bạn làm thủ tục nhập học theo hướng dẫn của cơ sở đã nộp hồ sơ, sau đó được cấp tài khoản học trên hoctructuyen.utt.edu.vn.\n\nĐể biết kết quả của mình, bạn liên hệ trực tiếp cơ sở đã nộp hồ sơ.",
+      "source": "Thông báo tuyển sinh đào tạo từ xa trình độ đại học năm 2026"
+    }
+  ],
+  "documents": [
+    {
+      "id": "tb-pham-vi",
+      "title": "Phạm vi và đối tượng tuyển sinh",
+      "source": "Thông báo tuyển sinh đào tạo từ xa trình độ đại học năm 2026",
+      "text": "Tuyển sinh trong cả nước. Đối tượng: người đã tốt nghiệp THPT (chính quy hoặc giáo dục thường xuyên), hoặc đã có bằng tốt nghiệp trung cấp, cao đẳng, đại học. Đáp ứng quy định về sức khỏe và các điều kiện dự tuyển khác theo Quy chế tuyển sinh đại học chính quy hiện hành. Không thi đầu vào."
+    },
+    {
+      "id": "tb-nganh",
+      "title": "Ngành, mã ngành và chỉ tiêu 2026",
+      "source": "Thông báo tuyển sinh đào tạo từ xa trình độ đại học năm 2026",
+      "text": "Tổng chỉ tiêu 1.000. 7510104 Công nghệ kỹ thuật giao thông (CNKT Xây dựng Cầu đường bộ; Xây dựng Cầu – Đường sắt): 350. 7840101 Quản lý và Điều hành vận tải đường sắt: 40. 7340301 Kế toán doanh nghiệp: 40. 7340101 Quản trị doanh nghiệp: 40. 7510605 Logistics và Quản lý chuỗi cung ứng: 50. 7510102 CNKT Công trình xây dựng dân dụng và công nghiệp: 220. 7480201 Công nghệ thông tin: 90. 7510205 Công nghệ kỹ thuật ô tô: 120. 7580302 Quản lý xây dựng: 50."
+    },
+    {
+      "id": "tb-phuong-thuc",
+      "title": "Phương thức xét tuyển",
+      "source": "Thông báo tuyển sinh đào tạo từ xa trình độ đại học năm 2026",
+      "text": "Tuyển thẳng đối với thí sinh đã có bằng đại học. Xét tuyển kết hợp: thí sinh đã có bằng trung cấp, cao đẳng cùng lĩnh vực được xét kết quả học tập 2 môn cơ sở ngành và chuyên ngành của lĩnh vực đã tốt nghiệp. Thí sinh có bằng trung cấp, cao đẳng khác lĩnh vực hoặc đã tốt nghiệp THPT, THBT được xét theo kết quả thi tốt nghiệp THPT, THBT, đánh giá năng lực (ĐGNL) hoặc đánh giá tư duy (ĐGTD) cùng năm tuyển sinh, hoặc xét học bạ (điểm tổng kết các môn THPT/THBT); tổ hợp môn xét học bạ theo Đề án tuyển sinh năm 2026 của Trường. Điểm trúng tuyển xét từ cao xuống thấp đến khi đủ chỉ tiêu từng ngành."
+    },
+    {
+      "id": "tb-thoi-gian",
+      "title": "Thời gian đào tạo",
+      "source": "Thông báo tuyển sinh đào tạo từ xa trình độ đại học năm 2026",
+      "text": "Thời gian đào tạo từ 2 đến 5 năm tùy theo trình độ đầu vào của người học. Người đã có bằng trung cấp, cao đẳng, đại học được xét công nhận, miễn học phần nên thời gian ngắn hơn người tốt nghiệp THPT."
+    },
+    {
+      "id": "tb-lich",
+      "title": "Thời gian xét tuyển và nhận hồ sơ",
+      "source": "Thông báo tuyển sinh đào tạo từ xa trình độ đại học năm 2026",
+      "text": "Phát hành và nhận hồ sơ từ ngày 10/01/2026 đến ngày 10/12/2026. Nhận hồ sơ tại các cơ sở đào tạo từ thứ Hai đến thứ Sáu hàng tuần. Dự kiến xét tuyển 4 đợt vào tháng 3, tháng 5, tháng 8 và tháng 11 năm 2026."
+    },
+    {
+      "id": "tb-ho-so",
+      "title": "Hồ sơ đăng ký xét tuyển",
+      "source": "Thông báo tuyển sinh đào tạo từ xa trình độ đại học năm 2026",
+      "text": "Đăng ký trực tuyến và công khai thông tin tại https://by.tn/U8XF. Hồ sơ bản cứng nộp tại Bộ phận tuyển sinh gồm: 1) Sơ yếu lý lịch theo mẫu có dán ảnh và xác nhận của chính quyền địa phương hoặc cơ quan công tác; 2) Bản sao công chứng bằng tốt nghiệp THPT, TCCN, CĐ, ĐH; 3) Bản sao công chứng học bạ THPT và bảng điểm, phụ lục văn bằng TCCN, CĐ, ĐH; 4) Chứng chỉ tin học, tiếng Anh hoặc ngoại ngữ khác (nếu có); 5) Bản sao công chứng giấy khai sinh hoặc căn cước công dân; 6) 02 ảnh 3x4, mặt sau ghi họ tên, ngày sinh, nơi sinh."
+    },
+    {
+      "id": "tb-le-phi",
+      "title": "Lệ phí và học phí",
+      "source": "Thông báo tuyển sinh đào tạo từ xa trình độ đại học năm 2026",
+      "text": "Lệ phí đăng ký xét tuyển 100.000 đồng. Học phí theo quy định của Bộ Giáo dục và Đào tạo; thông báo tuyển sinh không công bố mức học phí cụ thể."
+    },
+    {
+      "id": "tb-lien-he-hn",
+      "title": "Nơi nhận hồ sơ – Cơ sở Hà Nội",
+      "source": "Thông báo tuyển sinh đào tạo từ xa trình độ đại học năm 2026",
+      "text": "Phòng 104, Nhà H1, số 54 Triều Khúc, phường Thanh Liệt, Hà Nội. Điện thoại 0243.8548718; 097.209.1290 (cô Ly); 097.853.7248 (thầy Hoàng Tuấn); 096.606.0713 (cô Huyền)."
+    },
+    {
+      "id": "tb-lien-he-pt",
+      "title": "Nơi nhận hồ sơ – Cơ sở Phú Thọ",
+      "source": "Thông báo tuyển sinh đào tạo từ xa trình độ đại học năm 2026",
+      "text": "Phòng 204, Nhà B3, số 278 Lam Sơn, phường Vĩnh Yên, Phú Thọ (trước đây là cơ sở Vĩnh Phúc). Điện thoại 0211.3712296; 096.951.1225 (cô Giang)."
+    },
+    {
+      "id": "tb-lien-he-tn",
+      "title": "Nơi nhận hồ sơ – Cơ sở Thái Nguyên",
+      "source": "Thông báo tuyển sinh đào tạo từ xa trình độ đại học năm 2026",
+      "text": "Phòng 104, Nhà Hiệu bộ, số 999 Phú Thái, phường Phan Đình Phùng, Thái Nguyên. Điện thoại 0982.148.991 (thầy Lý)."
+    },
+    {
+      "id": "utt-chung",
+      "title": "Thông tin chung về trường",
+      "source": "utt.edu.vn",
+      "text": "Trường Đại học Công nghệ Giao thông vận tải (UTT), mã trường GTA, website utt.edu.vn. Hotline tuyển sinh chung 0243.552.6713. Trụ sở Hà Nội: 54 Triều Khúc, Thanh Liệt, Hà Nội, điện thoại 0243.854.4264. Cơ sở Phú Thọ: 278 Lam Sơn, Vĩnh Yên, điện thoại 0211.386.7405. Trung tâm Thái Nguyên: 999 Phú Thái, Phan Đình Phùng, điện thoại 0208.385.6545. Các hệ đào tạo: đại học chính quy, liên thông – văn bằng 2 – vừa làm vừa học, đào tạo từ xa, sau đại học, đào tạo quốc tế. Tra cứu văn bằng tại tracuuvanbang.utt.edu.vn; đăng ký xét tuyển tại xettuyen.utt.edu.vn."
+    },
+    {
+      "id": "ttxa-vien",
+      "title": "Viện Đào tạo liên tục và từ xa",
+      "source": "utt.edu.vn/vn/khoataichuc",
+      "text": "Hệ đào tạo từ xa do Viện Đào tạo liên tục và từ xa của trường quản lý. Quy chế đào tạo từ xa trình độ đại học của trường ban hành theo Quyết định 1545 ngày 12/3/2025, căn cứ Thông tư 28/2023/TT-BGDĐT (Quy chế đào tạo từ xa) và Thông tư 30/2023/TT-BGDĐT (ứng dụng CNTT trong đào tạo trực tuyến), áp dụng từ khóa K76 trở về sau. Viện từng tuyển sinh từ xa các năm 2023, 2024, 2025 và 2026."
+    },
+    {
+      "id": "lms",
+      "title": "Hệ thống học trực tuyến",
+      "source": "hoctructuyen.utt.edu.vn",
+      "text": "Học viên từ xa học trên hệ thống hoctructuyen.utt.edu.vn. Hệ thống có các chức năng: danh sách lớp tham gia, vào học các lớp đang mở, lịch học, ca thi, bài thi bên ngoài lớp học, chứng chỉ đã được cấp, quản lý điểm, thông tin tài khoản, kết quả miễn môn và hướng dẫn sử dụng. Hỗ trợ hệ thống: điện thoại 0243.854.8718."
+    },
+    {
+      "id": "luat-van-bang",
+      "title": "Giá trị văn bằng",
+      "source": "Luật Giáo dục đại học (sửa đổi 2018)",
+      "text": "Văn bằng giáo dục đại học thuộc hệ thống giáo dục quốc dân có giá trị pháp lý như nhau giữa các hình thức đào tạo. Người tốt nghiệp hệ từ xa được cấp bằng đại học do Trường Đại học Công nghệ GTVT cấp, có thể dùng để dự tuyển công chức và học tiếp trình độ thạc sĩ theo quy định."
+    }
+  ],
+  "majors": [
+    {
+      "code": "7510104",
+      "name": "Công nghệ kỹ thuật giao thông",
+      "note": "Cầu đường bộ; Cầu – Đường sắt",
+      "quota": 350
+    },
+    {
+      "code": "7510102",
+      "name": "CNKT Công trình xây dựng dân dụng và công nghiệp",
+      "quota": 220
+    },
+    {
+      "code": "7510205",
+      "name": "Công nghệ kỹ thuật ô tô",
+      "quota": 120
+    },
+    {
+      "code": "7480201",
+      "name": "Công nghệ thông tin",
+      "quota": 90
+    },
+    {
+      "code": "7510605",
+      "name": "Logistics và Quản lý chuỗi cung ứng",
+      "quota": 50
+    },
+    {
+      "code": "7580302",
+      "name": "Quản lý xây dựng",
+      "quota": 50
+    },
+    {
+      "code": "7840101",
+      "name": "Quản lý và Điều hành vận tải đường sắt",
+      "quota": 40
+    },
+    {
+      "code": "7340301",
+      "name": "Kế toán doanh nghiệp",
+      "quota": 40
+    },
+    {
+      "code": "7340101",
+      "name": "Quản trị doanh nghiệp",
+      "quota": 40
+    }
+  ],
+  "admission": {
+    "open": "2026-01-10",
+    "close": "2026-12-10",
+    "rounds": [
+      {
+        "label": "Đợt 1",
+        "month": 3
+      },
+      {
+        "label": "Đợt 2",
+        "month": 5
+      },
+      {
+        "label": "Đợt 3",
+        "month": 8
+      },
+      {
+        "label": "Đợt 4",
+        "month": 11
+      }
+    ],
+    "year": 2026
+  },
+  "contacts": [
+    {
+      "campus": "Hà Nội",
+      "address": "P.104, Nhà H1, 54 Triều Khúc, Thanh Liệt",
+      "phones": [
+        [
+          "Văn phòng",
+          "0243.8548718"
+        ],
+        [
+          "Cô Ly",
+          "097.209.1290"
+        ],
+        [
+          "Thầy Hoàng Tuấn",
+          "097.853.7248"
+        ],
+        [
+          "Cô Huyền",
+          "096.606.0713"
+        ]
+      ]
+    },
+    {
+      "campus": "Phú Thọ",
+      "address": "P.204, Nhà B3, 278 Lam Sơn, Vĩnh Yên",
+      "phones": [
+        [
+          "Văn phòng",
+          "0211.3712296"
+        ],
+        [
+          "Cô Giang",
+          "096.951.1225"
+        ]
+      ]
+    },
+    {
+      "campus": "Thái Nguyên",
+      "address": "P.104, Nhà Hiệu bộ, 999 Phú Thái, Phan Đình Phùng",
+      "phones": [
+        [
+          "Thầy Lý",
+          "0982.148.991"
+        ]
+      ]
+    }
+  ],
+  "links": [
+    {
+      "label": "Đăng ký hồ sơ trực tuyến",
+      "url": "https://by.tn/U8XF"
+    },
+    {
+      "label": "Cổng xét tuyển",
+      "url": "http://xettuyen.utt.edu.vn"
+    },
+    {
+      "label": "Thông báo tuyển sinh từ xa 2026",
+      "url": "https://utt.edu.vn/vn/tuyensinh/vua-hoc-vua-lam/tuyen-sinh-vua-hoc-vua-lam/thong-bao-tuyen-sinh-dao-tao-tu-xa-trinh-do-dai-hoc-nam-2026-a16869.html"
+    },
+    {
+      "label": "Hệ thống học trực tuyến",
+      "url": "https://hoctructuyen.utt.edu.vn"
+    },
+    {
+      "label": "Tra cứu văn bằng",
+      "url": "http://tracuuvanbang.utt.edu.vn"
+    },
+    {
+      "label": "Trang tuyển sinh UTT",
+      "url": "https://utt.edu.vn/vn/tuyensinh"
+    }
+  ]
+}

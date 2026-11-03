@@ -1,0 +1,6 @@
+.env
+node_modules/
+.netlify/
+dist/
+data/uploads.json
+.DS_Store

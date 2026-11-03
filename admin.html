@@ -1,0 +1,414 @@
+<!doctype html>
+<html lang="vi">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex">
+<title>Quản trị dữ liệu chatbot ĐHTX</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+  /* Cùng hệ màu với trang chat: đầu trang xanh đậm + vạch vàng, thân là các khối thao tác xếp dọc. */
+  :root {
+    --bg: #eef2f6; --surface: #ffffff; --surface-2: #f6f8fb; --ink: #13263d; --muted: #5a6b80; --line: #d8e0ea;
+    --brand: #0f3d6e; --brand-2: #164f8c; --brand-ink: #ffffff; --signal: #f2b30c; --signal-ink: #13263d;
+    --ok: #1f7a4d; --bad: #b4421f; --btn: #0f3d6e; --link: #164f8c;
+    --font-body: "Be Vietnam Pro", "Segoe UI", system-ui, sans-serif;
+    --font-mono: "JetBrains Mono", ui-monospace, Menlo, monospace;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #0c141e; --surface: #142131; --surface-2: #101b28; --ink: #e4ebf3; --muted: #93a4b8; --line: #243850;
+      --brand: #0b2c50; --brand-2: #4a8fd6; --brand-ink: #f1f5fa; --signal: #f5c242; --ok: #4cc38a; --bad: #f08a64; --btn: #2c6cb0; --link: #9cc4ee; color-scheme: dark;
+    }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--ink); font-family: var(--font-body); font-size: 14.5px; line-height: 1.55; }
+  button { font: inherit; cursor: pointer; }
+  :is(button, a, input, textarea, summary):focus-visible { outline: 2px solid var(--signal); outline-offset: 2px; }
+  .wrap { max-width: 980px; margin: 0 auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+
+  header { background: var(--brand); color: var(--brand-ink); border-bottom: 4px solid var(--signal); }
+  header .wrap { display: flex; align-items: center; gap: 12px; padding-block: 12px; }
+  .sign { width: 40px; height: 40px; border-radius: 8px; background: var(--signal); color: var(--signal-ink); display: grid; place-items: center; font-weight: 700; font-size: 11px; flex: none; }
+  header h1 { margin: 0; font-size: 16px; flex: 1; min-width: 0; }
+  header h1 small { display: block; font-weight: 400; font-size: 12px; opacity: .78; }
+  header a, header button { color: var(--brand-ink); background: transparent; border: 1px solid rgba(255,255,255,.3); border-radius: 8px; padding: 6px 10px; text-decoration: none; font-size: 13px; white-space: nowrap; }
+
+  main { padding-block: 22px 40px; display: flex; flex-direction: column; gap: 18px; }
+  .card { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 18px; }
+  .card h2 { margin: 0 0 4px; font-size: 15.5px; }
+  .card > p { margin: 0 0 14px; color: var(--muted); font-size: 13px; }
+  .btn { border: 0; border-radius: 8px; padding: 8px 14px; background: var(--btn); color: var(--brand-ink); font-weight: 600; }
+  .btn.ghost { background: transparent; color: var(--ink); border: 1px solid var(--line); font-weight: 500; }
+  .btn.danger { background: transparent; color: var(--bad); border: 1px solid var(--line); font-weight: 500; padding: 5px 10px; }
+  .btn:disabled { opacity: .5; cursor: default; }
+  input[type=password], textarea, input[type=text] { width: 100%; font: inherit; color: var(--ink); background: var(--bg); border: 1px solid var(--line); border-radius: 8px; padding: 9px 11px; }
+  .row { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+  .err { color: var(--bad); font-size: 13px; margin: 8px 0 0; min-height: 1em; }
+
+  #login { max-width: 420px; margin: 40px auto; }
+  #login form { display: flex; flex-direction: column; gap: 10px; }
+
+  .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 10px; }
+  .stat { background: var(--surface-2); border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; }
+  .stat b { display: block; font-size: 22px; font-variant-numeric: tabular-nums; }
+  .stat span { font-size: 12px; color: var(--muted); }
+
+  .drop { border: 2px dashed var(--line); border-radius: 12px; padding: 28px 16px; text-align: center; background: var(--surface-2); }
+  .drop.over { border-color: var(--brand-2); background: var(--bg); }
+  .drop strong { display: block; font-size: 15px; margin-bottom: 4px; }
+  .drop span { color: var(--muted); font-size: 13px; }
+  .fmt { display: flex; flex-wrap: wrap; gap: 6px; justify-content: center; margin: 12px 0; }
+  .fmt i { font-style: normal; font-family: var(--font-mono); font-size: 11px; padding: 2px 7px; border-radius: 5px; border: 1px solid var(--line); background: var(--surface); }
+  .hint { margin-top: 12px; font-size: 13px; color: var(--muted); }
+  .hint code { font-family: var(--font-mono); font-size: 12px; background: var(--surface-2); padding: 1px 5px; border-radius: 4px; color: var(--ink); }
+
+  .item { border: 1px solid var(--line); border-radius: 10px; padding: 12px; display: flex; flex-direction: column; gap: 8px; }
+  .item + .item { margin-top: 10px; }
+  .item .top { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+  .item .name { font-weight: 600; min-width: 0; overflow-wrap: anywhere; flex: 1; }
+  .badge { font-family: var(--font-mono); font-size: 11px; padding: 2px 7px; border-radius: 5px; background: var(--surface-2); border: 1px solid var(--line); color: var(--muted); }
+  .badge.ok { color: var(--ok); }
+  .badge.bad { color: var(--bad); }
+  details summary { cursor: pointer; font-size: 13px; color: var(--link); }
+  .preview { margin-top: 8px; display: flex; flex-direction: column; gap: 6px; max-height: 280px; overflow: auto; }
+  .preview div { font-size: 12.5px; background: var(--surface-2); border-radius: 6px; padding: 7px 9px; white-space: pre-wrap; overflow-wrap: anywhere; }
+  .preview b { font-weight: 600; }
+
+  .table-wrap { overflow-x: auto; }
+  table { width: 100%; border-collapse: collapse; font-size: 13.5px; }
+  th, td { text-align: left; padding: 9px 8px; border-bottom: 1px solid var(--line); vertical-align: middle; }
+  th { font-size: 11.5px; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); font-weight: 600; }
+  td.num { font-family: var(--font-mono); font-variant-numeric: tabular-nums; }
+  td.name { overflow-wrap: anywhere; }
+  .empty { color: var(--muted); font-size: 13px; padding: 10px 0; }
+
+  #answer { margin-top: 10px; font-size: 13.5px; white-space: pre-wrap; background: var(--surface-2); border-radius: 8px; padding: 10px 12px; }
+  #answer:empty { display: none; }
+  .toast { position: fixed; left: 50%; bottom: calc(24px + env(safe-area-inset-bottom, 0px)); transform: translateX(-50%); background: var(--ink); color: var(--bg); padding: 9px 15px; border-radius: 8px; font-size: 13px; z-index: 9; }
+</style>
+
+<header>
+  <div class="wrap">
+    <div class="sign" aria-hidden="true">ADMIN</div>
+    <h1>Quản trị dữ liệu chatbot<small>Tư vấn tuyển sinh Đại học từ xa – UTT</small></h1>
+    <a href="./" target="_blank" rel="noopener">Mở chatbot ↗</a>
+    <button type="button" id="logout" hidden>Đăng xuất</button>
+  </div>
+</header>
+
+<div class="wrap">
+  <section class="card" id="login">
+    <h2>Đăng nhập quản trị</h2>
+    <p>Nhập mật khẩu quản trị để cập nhật dữ liệu cho chatbot.</p>
+    <form id="loginForm">
+      <input type="password" id="pwd" autocomplete="current-password" placeholder="Mật khẩu quản trị" aria-label="Mật khẩu quản trị" required>
+      <button class="btn" type="submit">Đăng nhập</button>
+      <p class="err" id="loginErr"></p>
+    </form>
+  </section>
+
+  <main id="app" hidden>
+    <section class="card">
+      <h2>Tri thức hiện tại của chatbot</h2>
+      <p>Gồm dữ liệu gốc (thông báo tuyển sinh 2026) và các tài liệu đã upload.</p>
+      <div class="stats" id="stats"></div>
+    </section>
+
+    <section class="card">
+      <h2>Upload tài liệu</h2>
+      <p>File được đọc ngay trên trình duyệt, xem trước nội dung rồi mới lưu vào kho tri thức.</p>
+      <div class="drop" id="drop">
+        <strong>Kéo thả file vào đây</strong>
+        <span>hoặc</span>
+        <div class="fmt"><i>.xlsx</i><i>.xls</i><i>.csv</i><i>.docx</i><i>.pdf</i><i>.pptx</i><i>.txt</i><i>.md</i></div>
+        <div class="row" style="justify-content:center">
+          <button class="btn" type="button" id="pick">Chọn file</button>
+          <button class="btn ghost" type="button" id="template">Tải file Excel mẫu (hỏi–đáp)</button>
+        </div>
+        <input type="file" id="file" multiple accept=".xlsx,.xls,.csv,.docx,.pdf,.pptx,.txt,.md" hidden>
+      </div>
+      <label class="row" style="margin-top:12px;font-size:13.5px"><input type="checkbox" id="autoSave" checked> Tự lưu vào kho ngay sau khi đọc xong (bỏ chọn nếu muốn xem trước rồi mới lưu)</label>
+      <div class="hint">
+        <b>Excel có cột <code>Câu hỏi</code> và <code>Trả lời</code></b> → mỗi dòng thành một ý định mới, bot được <b>huấn luyện</b> để nhận ra câu hỏi đó (cột <code>Cách hỏi khác</code>, ngăn cách bằng dấu <code>;</code>, giúp bot hiểu nhiều cách hỏi).<br>
+        <b>Word, PDF, PowerPoint, văn bản, Excel thường</b> → cắt thành các đoạn tài liệu để bot <b>tra cứu (RAG)</b> khi trả lời. Không cần theo mẫu nào.
+      </div>
+      <div id="pending" style="margin-top:14px"></div>
+    </section>
+
+    <section class="card">
+      <h2>Tài liệu đã upload</h2>
+      <p>Xóa một tài liệu thì chatbot cũng thôi dùng dữ liệu đó.</p>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Tên file</th><th>Loại</th><th>Hỏi–đáp</th><th>Đoạn tài liệu</th><th>Ngày upload</th><th></th></tr></thead>
+          <tbody id="saved"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>Thử hỏi chatbot</h2>
+      <p>Kiểm tra nhanh chatbot đã dùng dữ liệu mới chưa.</p>
+      <form class="row" id="tryForm">
+        <input type="text" id="tryQ" placeholder="Ví dụ: học phí năm 2027 là bao nhiêu?" aria-label="Câu hỏi thử" style="flex:1;min-width:200px">
+        <button class="btn" type="submit" id="tryBtn">Hỏi</button>
+      </form>
+      <div id="answer"></div>
+    </section>
+  </main>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+<script>
+  const $ = (id) => document.getElementById(id);
+  const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+  const norm = (s) => String(s).toLowerCase().replace(/đ/g, "d").normalize("NFD").replace(/[̀-ͯ]/g, "").trim();
+  const MAX_FILE = 15 * 1024 * 1024, MAX_PAYLOAD = 2.5 * 1024 * 1024, CHUNK = 900;
+  pdfjsLib.GlobalWorkerOptions.workerSrc = "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js";
+
+  let pwd = "";
+  let pending = [];
+  try { pwd = sessionStorage.getItem("admin-pwd") || ""; } catch {}
+
+  function toast(t) {
+    const el = document.createElement("div"); el.className = "toast"; el.textContent = t;
+    document.body.appendChild(el); setTimeout(() => el.remove(), 2200);
+  }
+
+  async function api(method, body, id) {
+    const res = await fetch("api/admin" + (id ? "?id=" + encodeURIComponent(id) : ""), {
+      method, headers: { "Content-Type": "application/json", "x-admin-password": pwd }, body: body ? JSON.stringify(body) : undefined,
+    });
+    const data = await res.json().catch(() => ({ error: "Máy chủ trả lời không hợp lệ (HTTP " + res.status + ")" }));
+    if (!res.ok) throw Object.assign(new Error(data.error || "HTTP " + res.status), { status: res.status });
+    return data;
+  }
+
+  // ---------- Đăng nhập ----------
+  async function enter() {
+    const list = await api("GET");
+    try { sessionStorage.setItem("admin-pwd", pwd); } catch {}
+    $("login").hidden = true; $("app").hidden = false; $("logout").hidden = false;
+    renderSaved(list); loadStats();
+  }
+  $("loginForm").addEventListener("submit", async (e) => {
+    e.preventDefault();
+    pwd = $("pwd").value; $("loginErr").textContent = "";
+    try { await enter(); } catch (err) { $("loginErr").textContent = err.message; }
+  });
+  $("logout").onclick = () => { try { sessionStorage.removeItem("admin-pwd"); } catch {} location.reload(); };
+  if (pwd) enter().catch(() => { pwd = ""; });
+
+  async function loadStats() {
+    try {
+      const kb = await fetch("api/kb", { cache: "no-store" }).then((r) => r.json());
+      const upInt = kb.intents.filter((i) => i.tag.startsWith("up_")).length;
+      const upDoc = kb.documents.filter((d) => d.source.startsWith("Tài liệu upload")).length;
+      const samples = kb.intents.reduce((a, i) => a + i.patterns.length, 0);
+      $("stats").innerHTML = [
+        [kb.intents.length, `ý định (${upInt} từ upload)`], [samples, "câu mẫu huấn luyện"],
+        [kb.documents.length, `đoạn tài liệu RAG (${upDoc} từ upload)`],
+      ].map(([n, t]) => `<div class="stat"><b>${n}</b><span>${t}</span></div>`).join("");
+    } catch { $("stats").innerHTML = '<div class="empty">Không tải được thống kê.</div>'; }
+  }
+
+  function renderSaved(list) {
+    $("saved").innerHTML = list.length ? list.slice().reverse().map((s) =>
+      `<tr><td class="name">${esc(s.name)}</td><td><span class="badge">${esc(s.type || "?")}</span></td>` +
+      `<td class="num">${s.intents}</td><td class="num">${s.documents}</td>` +
+      `<td>${new Date(s.addedAt).toLocaleString("vi-VN")}</td>` +
+      `<td><button class="btn danger" type="button" data-id="${esc(s.id)}" data-name="${esc(s.name)}">Xóa</button></td></tr>`).join("")
+      : '<tr><td colspan="6" class="empty">Chưa có tài liệu nào được upload.</td></tr>';
+  }
+  $("saved").onclick = async (e) => {
+    const b = e.target.closest("button[data-id]"); if (!b) return;
+    if (!confirm(`Xóa "${b.dataset.name}" khỏi kho tri thức?`)) return;
+    b.disabled = true;
+    try { await api("DELETE", null, b.dataset.id); renderSaved(await api("GET")); loadStats(); toast("Đã xóa"); }
+    catch (err) { toast(err.message); b.disabled = false; }
+  };
+
+  // ---------- Đọc file ----------
+  function chunk(text) {
+    const paras = text.replace(/\r/g, "").split(/\n\s*\n|\n/).map((p) => p.replace(/[ \t]+/g, " ").trim()).filter((p) => p.length > 1);
+    const out = []; let cur = "";
+    for (const p of paras) {
+      if (cur && cur.length + p.length + 1 > CHUNK) { out.push(cur); cur = ""; }
+      cur = cur ? cur + "\n" + p : p;
+      while (cur.length > CHUNK * 1.5) { out.push(cur.slice(0, CHUNK)); cur = cur.slice(CHUNK); }
+    }
+    if (cur) out.push(cur);
+    return out;
+  }
+  const textToDocs = (name, text) => {
+    const parts = chunk(text);
+    return parts.map((t, i) => ({ title: parts.length > 1 ? `${name} (phần ${i + 1}/${parts.length})` : name, text: t }));
+  };
+
+  function parseSheets(name, data, type) {
+    const wb = XLSX.read(data, { type });
+    const intents = [], documents = [];
+    for (const sheetName of wb.SheetNames) {
+      const rows = XLSX.utils.sheet_to_json(wb.Sheets[sheetName], { header: 1, defval: "", raw: false })
+        .filter((r) => r.some((c) => String(c).trim()));
+      if (!rows.length) continue;
+      // Dòng tiêu đề hỏi–đáp có thể nằm dưới vài dòng tên trường/tên bảng -> dò 10 dòng đầu.
+      const isAlt = (h) => /khac|tuong tu|bien the|cach hoi|dien dat/.test(h);
+      const isQ = (h) => (/cau hoi|question/.test(h) || /^(hoi|q|faq)$/.test(h)) && !isAlt(h);
+      const isA = (h) => /tra loi|answer|dap an|giai dap|phan hoi/.test(h) || /^(dap|a)$/.test(h);
+      let hr = -1, qi = -1, ai = -1, alt = -1;
+      for (let i = 0; i < Math.min(rows.length, 10) && hr < 0; i++) {
+        const head = rows[i].map(norm);
+        qi = head.findIndex(isQ); ai = head.findIndex(isA);
+        if (qi >= 0 && ai >= 0) { hr = i; alt = head.findIndex(isAlt); }
+      }
+      if (hr >= 0) {
+        for (const r of rows.slice(hr + 1)) {
+          const q = String(r[qi]).trim(), a = String(r[ai]).trim();
+          if (!q || !a) continue;
+          const alts = alt >= 0 ? String(r[alt]).split(/[;\n|]/).map((s) => s.trim()).filter(Boolean) : [];
+          intents.push({ patterns: [q, ...alts], answer: a });
+        }
+      } else {
+        const header = rows[0].map((c) => String(c).trim());
+        rows.slice(1).forEach((r, i) => {
+          const text = r.map((c, j) => String(c).trim() && (header[j] ? `${header[j]}: ${String(c).trim()}` : String(c).trim())).filter(Boolean).join("; ");
+          if (text) documents.push({ title: `${name} – ${sheetName} – dòng ${i + 2}`, text });
+        });
+        if (rows.length === 1) documents.push(...textToDocs(`${name} – ${sheetName}`, header.join("; ")));
+      }
+    }
+    return { intents, documents };
+  }
+
+  async function parsePdf(buf) {
+    const pdf = await pdfjsLib.getDocument({ data: buf }).promise;
+    let text = "";
+    for (let i = 1; i <= pdf.numPages; i++) {
+      const c = await (await pdf.getPage(i)).getTextContent();
+      text += c.items.map((it) => it.str + (it.hasEOL ? "\n" : " ")).join("") + "\n\n";
+    }
+    return text;
+  }
+
+  // PowerPoint: mỗi slide có chữ thành một đoạn tài liệu "tên file – slide N".
+  async function parsePptx(name, buf) {
+    const zip = await JSZip.loadAsync(buf);
+    const slides = Object.keys(zip.files).filter((f) => /^ppt\/slides\/slide\d+\.xml$/.test(f))
+      .sort((a, b) => a.match(/\d+/)[0] - b.match(/\d+/)[0]);
+    const decode = (s) => new DOMParser().parseFromString(`<x>${s}</x>`, "text/html").body.textContent;
+    const docs = [];
+    for (const f of slides) {
+      const xml = await zip.file(f).async("string");
+      const text = xml.split("</a:p>").map((p) => decode([...p.matchAll(/<a:t>([^<]*)<\/a:t>/g)].map((m) => m[1]).join(""))).filter((t) => t.trim()).join("\n");
+      if (text.trim()) docs.push(...textToDocs(`${name} – slide ${f.match(/\d+/)[0]}`, text));
+    }
+    if (!docs.length) throw new Error("Không tìm thấy chữ trong các slide");
+    return docs;
+  }
+
+  async function parseFile(file) {
+    const ext = (file.name.split(".").pop() || "").toLowerCase();
+    if (file.size > MAX_FILE) throw new Error("File lớn hơn 15 MB");
+    if (ext === "doc") throw new Error("File .doc đời cũ chưa hỗ trợ, hãy mở bằng Word và lưu thành .docx");
+    const buf = await file.arrayBuffer();
+    // CSV đọc dạng chữ UTF-8 (SheetJS đọc byte CSV như Latin-1 làm vỡ tiếng Việt).
+    if (ext === "csv") return { type: ext, ...parseSheets(file.name, new TextDecoder("utf-8").decode(buf), "string") };
+    if (["xlsx", "xls"].includes(ext)) return { type: ext, ...parseSheets(file.name, buf, "array") };
+    let text;
+    if (ext === "pptx") return { type: ext, intents: [], documents: await parsePptx(file.name, buf) };
+    if (ext === "docx") text = (await mammoth.extractRawText({ arrayBuffer: buf })).value;
+    else if (ext === "pdf") text = await parsePdf(buf);
+    else if (["txt", "md"].includes(ext)) text = new TextDecoder("utf-8").decode(buf);
+    else throw new Error("Định dạng chưa hỗ trợ: ." + ext);
+    if (!text.trim()) throw new Error(ext === "pdf" ? "PDF không có lớp chữ (có thể là ảnh scan), chưa đọc được" : "File không có nội dung chữ");
+    return { type: ext, intents: [], documents: textToDocs(file.name, text) };
+  }
+
+  async function addFiles(files) {
+    let saved = false;
+    for (const file of files) {
+      const p = { name: file.name, status: "reading" };
+      pending.push(p); renderPending();
+      try {
+        Object.assign(p, await parseFile(file));
+        p.status = p.intents.length || p.documents.length ? "ready" : "error";
+        if (p.status === "error") p.error = "Không tìm thấy nội dung dùng được";
+      } catch (err) { p.status = "error"; p.error = err.message; }
+      renderPending();
+      if (p.status === "ready" && $("autoSave").checked) { await save(p); renderPending(); saved = true; }
+    }
+    if (saved) { renderSaved(await api("GET")); loadStats(); }
+  }
+
+  function renderPending() {
+    const box = $("pending");
+    if (!pending.length) { box.innerHTML = ""; return; }
+    const ready = pending.filter((p) => p.status === "ready").length;
+    box.innerHTML = pending.map((p, i) => {
+      const badge = p.status === "reading" ? '<span class="badge">đang đọc…</span>'
+        : p.status === "error" ? `<span class="badge bad">lỗi</span>`
+        : p.status === "saving" ? '<span class="badge">đang lưu…</span>'
+        : `<span class="badge ok">${p.intents.length} hỏi–đáp · ${p.documents.length} đoạn</span>`;
+      const prev = p.status === "ready" ? `<details><summary>Xem trước nội dung</summary><div class="preview">` +
+        p.intents.slice(0, 5).map((it) => `<div><b>Hỏi:</b> ${esc(it.patterns.join(" | "))}\n<b>Đáp:</b> ${esc(it.answer)}</div>`).join("") +
+        p.documents.slice(0, 5).map((d) => `<div><b>${esc(d.title)}</b>\n${esc(d.text.slice(0, 400))}${d.text.length > 400 ? "…" : ""}</div>`).join("") +
+        (p.intents.length + p.documents.length > 10 ? `<div>… và ${p.intents.length + p.documents.length - 10} mục nữa</div>` : "") +
+        `</div></details>` : p.status === "error" ? `<div class="err" style="margin:0">${esc(p.error)}</div>` : "";
+      return `<div class="item"><div class="top"><span class="name">${esc(p.name)}</span>${badge}` +
+        (p.status === "ready" ? `<button class="btn" type="button" data-save="${i}">Lưu vào kho</button>` : "") +
+        (p.status !== "saving" && p.status !== "reading" ? `<button class="btn ghost" type="button" data-drop="${i}">Bỏ</button>` : "") +
+        `</div>${prev}</div>`;
+    }).join("") + (ready > 1 ? `<div class="row" style="margin-top:10px"><button class="btn" type="button" id="saveAll">Lưu tất cả (${ready} file)</button></div>` : "");
+  }
+
+  async function save(p) {
+    const payload = { name: p.name, type: p.type, intents: p.intents, documents: p.documents };
+    if (JSON.stringify(payload).length > MAX_PAYLOAD) { p.status = "error"; p.error = "Nội dung quá dài, hãy chia file nhỏ hơn"; return; }
+    p.status = "saving"; renderPending();
+    try { await api("POST", payload); pending.splice(pending.indexOf(p), 1); toast(`Đã lưu "${p.name}"`); }
+    catch (err) { p.status = "error"; p.error = err.message; }
+  }
+  $("pending").onclick = async (e) => {
+    const s = e.target.closest("[data-save]"), d = e.target.closest("[data-drop]");
+    if (d) { pending.splice(+d.dataset.drop, 1); renderPending(); return; }
+    const targets = s ? [pending[+s.dataset.save]] : e.target.id === "saveAll" ? pending.filter((p) => p.status === "ready") : [];
+    if (!targets.length) return;
+    for (const p of targets) await save(p);
+    renderPending(); renderSaved(await api("GET")); loadStats();
+  };
+
+  const drop = $("drop");
+  $("pick").onclick = () => $("file").click();
+  $("file").onchange = () => { addFiles([...$("file").files]); $("file").value = ""; };
+  drop.addEventListener("dragover", (e) => { e.preventDefault(); drop.classList.add("over"); });
+  drop.addEventListener("dragleave", () => drop.classList.remove("over"));
+  drop.addEventListener("drop", (e) => { e.preventDefault(); drop.classList.remove("over"); addFiles([...e.dataTransfer.files]); });
+
+  $("template").onclick = () => {
+    const ws = XLSX.utils.aoa_to_sheet([
+      ["Câu hỏi", "Cách hỏi khác (ngăn cách bằng ;)", "Trả lời"],
+      ["Học phí hệ từ xa năm 2027 là bao nhiêu?", "học phí 2027; một tín chỉ bao nhiêu tiền năm 2027", "Ví dụ: Học phí năm 2027 là ... đồng/tín chỉ (thay bằng số liệu chính thức)."],
+      ["Có lớp học trực tiếp vào cuối tuần không?", "học offline cuối tuần; có buổi gặp mặt không", "Ví dụ: Trường tổ chức ... (thay bằng thông tin chính thức)."],
+    ]);
+    ws["!cols"] = [{ wch: 45 }, { wch: 45 }, { wch: 70 }];
+    const wb = XLSX.utils.book_new(); XLSX.utils.book_append_sheet(wb, ws, "Hỏi đáp");
+    XLSX.writeFile(wb, "mau-hoi-dap-chatbot.xlsx");
+  };
+
+  // ---------- Thử hỏi ----------
+  $("tryForm").addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const q = $("tryQ").value.trim(); if (!q) return;
+    $("tryBtn").disabled = true; $("answer").textContent = "Đang hỏi…";
+    try {
+      const r = await fetch("api/chat", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ message: q, history: [] }) }).then((x) => x.json());
+      $("answer").textContent = `${r.answer}\n\n— ${r.mode === "llm" ? "AI + RAG" : "Học máy"} · ý định: ${r.intent} · nguồn: ${(r.sources || []).join("; ") || "–"}`;
+    } catch (err) { $("answer").textContent = "Lỗi: " + err.message; }
+    $("tryBtn").disabled = false;
+  });
+</script>

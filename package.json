@@ -1,0 +1,12 @@
+{
+  "name": "chatbot-tuyensinh-dhtx-utt",
+  "private": true,
+  "scripts": {
+    "test": "node test.js",
+    "build": "node build.js",
+    "start": "node --env-file=.env server.js"
+  },
+  "dependencies": {
+    "@netlify/blobs": "11.1.4"
+  }
+}
