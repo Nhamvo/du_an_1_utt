@@ -4,7 +4,7 @@
 
 Dự án gồm 2 phần dùng chung một backend:
 
-1. **Chatbot tư vấn (v2 – LLM + RAG):** trả lời câu hỏi tuyển sinh hệ đại học từ xa, kết hợp mô hình học máy tự huấn luyện với Gemini.
+1. **Chatbot tư vấn (RAG chuẩn: LLM + Embedding + Vector Database):** trả lời câu hỏi tuyển sinh hệ đại học từ xa. Tài liệu được nhúng thành vector (Gemini Embedding), lưu trong PostgreSQL + pgvector, tìm Top-k đoạn gần nghĩa nhất rồi để Gemini viết câu trả lời.
 2. **Trang admin:** kéo thả file Excel, Word, PDF, PowerPoint… để cập nhật dữ liệu cho chatbot mà không cần sửa code.
 
 | | Đường dẫn |
@@ -16,7 +16,7 @@ Dự án gồm 2 phần dùng chung một backend:
 
 ---
 
-## 1. Chatbot tư vấn (LLM + RAG)
+## 1. Chatbot tư vấn (RAG: LLM + Embedding + Vector DB)
 
 ### Tính năng
 - Chào và giới thiệu tuyển sinh ngay khi mở trang; câu hỏi gợi ý.
@@ -27,24 +27,41 @@ Dự án gồm 2 phần dùng chung một backend:
 - Thanh bên: đếm ngược hạn nộp hồ sơ, 4 đợt xét tuyển, 9 ngành kèm chỉ tiêu, số điện thoại 3 cơ sở (bấm để sao chép), liên kết hữu ích.
 - Nhập bằng giọng nói, đọc to câu trả lời, sao chép, đánh giá 👍/👎, lưu lịch sử, tải hội thoại `.txt`, giao diện sáng/tối, dùng tốt trên điện thoại.
 
-### Cách hoạt động
+### Cách hoạt động (RAG theo 2 giai đoạn)
+
+```
+Kho tri thức ──► Chunking ──► Embedding ──► Vector DB ──► Retriever ──► LLM
+PDF·Word·Excel    chia đoạn    văn bản→vector  lưu & tìm gần   lấy Top-k     trả lời
+```
+
+**Giai đoạn 1 – Chuẩn bị trước:** nạp tài liệu (`data/knowledge.json` + file upload ở trang admin) → chia đoạn → **Gemini Embedding** (`gemini-embedding-001`, 768 chiều) → lưu vào **Vector DB** (PostgreSQL + **pgvector** trên Netlify Database, bảng `chunks`, chỉ mục HNSW cosine). Dữ liệu gốc tự nhúng lại khi `knowledge.json` thay đổi; file upload được nhúng ngay khi lưu.
+
+**Giai đoạn 2 – Khi người dùng hỏi:**
 
 ```
 Câu hỏi
-  │
-  ├─ 1. Chặn an toàn: có từ nhạy cảm → từ chối ngay (không gửi lên AI)
-  ├─ 2. Retrieval: mô hình học máy (TF-IDF + KNN) tìm các ý định khớp nhất + 4 đoạn tài liệu gần nhất
-  ├─ 3. Augmentation: ghép tài liệu + lịch sử hội thoại vào prompt (cấm bịa số liệu)
-  └─ 4. Generation: Gemini hiểu ý người dùng và quyết định
-         ├─ câu tuyển sinh  → trả lời từ tài liệu, kèm nguồn
-         ├─ chào hỏi, cảm xúc, câu mơ hồ → trò chuyện tự nhiên, hỏi lại, gợi ý chủ đề
-         └─ câu lạc đề      → lịch sự từ chối, mời hỏi về tuyển sinh
-     Gemini lỗi / quá thời gian → mô hình học máy trả lời (câu lạc đề thì từ chối)
+  ├─ 0. Chặn an toàn: có từ nhạy cảm → từ chối ngay (không gửi lên AI)
+  ├─ 1. Embedding câu hỏi → vector
+  ├─ 2. Retriever: pgvector tìm Top-5 đoạn gần nghĩa nhất (khoảng cách cosine)
+  ├─ 3. Ghép các đoạn + lịch sử hội thoại vào prompt (cấm bịa số liệu)
+  └─ 4. LLM (Gemini) trả lời, kèm nguồn
+         ├─ câu tuyển sinh → trả lời từ tài liệu
+         ├─ chào hỏi, câu mơ hồ → trò chuyện tự nhiên, hỏi lại
+         └─ câu lạc đề → lịch sự từ chối
+Dự phòng: Vector DB lỗi → tìm bằng TF-IDF; Gemini lỗi → mô hình học máy trả lời câu soạn sẵn.
 ```
 
-- **Mô hình học máy** (`bot.js`): tách từ tiếng Việt (có dấu và không dấu), vector hóa TF-IDF từ đơn + cặp từ, phân loại ý định bằng KNN (cosine). Dùng để truy xuất tài liệu cho Gemini và trả lời dự phòng; ở chế độ dự phòng, câu hỏi bị coi là ngoài phạm vi khi độ khớp < 0,3 hoặc độ phủ từ vựng ≤ 50%.
-- **Dữ liệu huấn luyện** (`data/knowledge.json`): 29 ý định, 383 câu mẫu, 14 đoạn tài liệu RAG.
-- **LLM**: Google Gemini (`gemini-3.5-flash-lite`), gọi phía server nên API key không lộ ra trình duyệt.
+Ví dụ tìm theo nghĩa: "tiền học mỗi kỳ" → đoạn "học phí" (độ giống 0,73); "bao giờ đóng cổng nhận hồ sơ" → "hạn nộp hồ sơ" (0,75), dù không trùng từ khóa.
+
+| Thành phần | Công nghệ | File |
+|---|---|---|
+| LLM | Google Gemini `gemini-3.5-flash-lite` | `rag.js` |
+| Embedding | Gemini `gemini-embedding-001` (768 chiều, chuẩn hóa) | `vectors.js` |
+| Vector Database | PostgreSQL + pgvector (Netlify Database, Neon) | `vectors.js` |
+| Học máy (dự phòng, chặn nhạy cảm, gắn ý định) | TF-IDF + KNN tự viết | `bot.js` |
+
+- **Dữ liệu** (`data/knowledge.json`): 29 ý định, 383 câu mẫu huấn luyện, 14 đoạn tài liệu → 43 vector trong Vector DB.
+- API key Gemini và kết nối database chỉ nằm phía server, không lộ ra trình duyệt.
 
 ---
 
@@ -57,6 +74,8 @@ Mở `/admin`, đăng nhập bằng mật khẩu quản trị (`ADMIN_PASSWORD`)
 | Word `.docx`, PDF có lớp chữ, PowerPoint `.pptx`, `.txt`, `.md` | Lấy chữ, cắt thành đoạn ~900 ký tự để tra cứu (RAG) |
 | Excel/CSV thường | Mỗi dòng thành một đoạn dạng `Tên cột: giá trị; …` |
 | Excel/CSV có cột hỏi + cột trả lời (`Câu hỏi/Trả lời`, `Hỏi/Đáp`, `Q/A`…) | Mỗi dòng thành một **ý định mới**, bot được huấn luyện lại ngay. Cột `Cách hỏi khác` (ngăn cách bằng `;`) là tùy chọn |
+
+Mỗi đoạn / cặp hỏi–đáp vừa lưu được **nhúng vector và ghi vào Vector DB ngay**; xóa tài liệu thì xóa luôn vector. Trang admin hiển thị số vector đang có.
 
 - Dòng tiêu đề Excel được dò trong 10 dòng đầu (bỏ qua dòng tên trường, tên bảng).
 - Mặc định **tự lưu** sau khi đọc; bỏ chọn để xem trước rồi mới lưu.
@@ -72,8 +91,10 @@ Mở `/admin`, đăng nhập bằng mật khẩu quản trị (`ADMIN_PASSWORD`)
 |---|---|
 | Frontend | HTML, CSS, JavaScript thuần (không framework) |
 | Backend | Node.js, Netlify Functions (serverless) |
-| Lưu dữ liệu upload | Netlify Blobs (key–value); chạy local thì lưu `data/uploads.json` |
-| LLM | Google Gemini API |
+| LLM | Google Gemini `gemini-3.5-flash-lite` |
+| Embedding | Google Gemini `gemini-embedding-001` |
+| Vector Database | PostgreSQL + pgvector (Netlify Database) |
+| Lưu file upload | Netlify Blobs (key–value); chạy local thì lưu `data/uploads.json` |
 | Đọc file (trang admin) | SheetJS, mammoth, pdf.js, JSZip (tải từ CDN) |
 
 ## Cấu trúc thư mục
@@ -82,7 +103,8 @@ Mở `/admin`, đăng nhập bằng mật khẩu quản trị (`ADMIN_PASSWORD`)
 ├── index.html                 Giao diện chatbot
 ├── admin.html                 Trang admin upload dữ liệu
 ├── bot.js                     Mô hình học máy: tiền xử lý, huấn luyện, phân loại, truy xuất (dùng cả FE và BE)
-├── rag.js                     Pipeline LLM + RAG gọi Gemini
+├── rag.js                     Pipeline RAG: retriever (Vector DB, dự phòng TF-IDF) + LLM Gemini
+├── vectors.js                 Embedding (Gemini) + Vector DB (PostgreSQL + pgvector)
 ├── store.js                   Lưu/đọc dữ liệu upload, API quản trị, kiểm tra mật khẩu
 ├── server.js                  Server chạy local (port 8088)
 ├── netlify/functions/
@@ -133,6 +155,8 @@ npx netlify-cli env:set GEMINI_MODEL gemini-3.5-flash-lite
 npx netlify-cli deploy --prod
 ```
 
+Lần deploy đầu, Netlify thấy package `@netlify/database` sẽ **tự tạo Vector DB** (PostgreSQL) cho site; câu hỏi đầu tiên tự bật pgvector, tạo bảng và nhúng dữ liệu gốc. Quản lý database tại mục **Database** của project trên Netlify.
+
 Kéo thả thư mục lên Netlify Drop **không** chạy được Functions, nên phần AI và trang admin sẽ không hoạt động; cần deploy bằng CLI hoặc kết nối repo GitHub.
 
 ## Biến môi trường
@@ -142,6 +166,8 @@ Kéo thả thư mục lên Netlify Drop **không** chạy được Functions, n�
 | `GEMINI_API_KEY` | Không (thiếu thì chỉ dùng học máy) | API key Google AI Studio |
 | `GEMINI_MODEL` | Không | Mặc định `gemini-3.5-flash-lite` |
 | `GEMINI_TIMEOUT_MS` | Không | Thời gian chờ Gemini, mặc định 45000 |
+| `EMBED_MODEL` | Không | Mặc định `gemini-embedding-001` |
+| `NETLIFY_DB_URL` | Không | Chuỗi kết nối Vector DB; Netlify tự cấp khi deploy (package `@netlify/database`). Thiếu thì bot tìm tài liệu bằng TF-IDF |
 | `ADMIN_PASSWORD` | Có (cho trang admin) | Mật khẩu trang quản trị |
 
 ## Kiểm thử
@@ -149,6 +175,6 @@ Kéo thả thư mục lên Netlify Drop **không** chạy được Functions, n�
 `npm test` chạy 37 câu hỏi mẫu (đúng ý định, từ chối câu lạc đề và nhạy cảm, gõ không dấu), kiểm tra dữ liệu upload được huấn luyện/tra cứu và chặn sai mật khẩu admin.
 
 ## Hướng phát triển
-- Thay TF-IDF bằng embedding + Vector DB để hiểu nghĩa tốt hơn.
-- GraphRAG cho câu hỏi cần liên kết nhiều thông tin.
+- GraphRAG (trích xuất thực thể – quan hệ, knowledge graph) cho câu hỏi cần liên kết nhiều thông tin.
+- Kết hợp tìm theo nghĩa (vector) và theo từ khóa (hybrid search), xếp hạng lại kết quả (re-ranking).
 - Đọc PDF scan bằng OCR; kết nối Zalo/Messenger.

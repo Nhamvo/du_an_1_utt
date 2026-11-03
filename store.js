@@ -3,6 +3,7 @@
 const fs = require("fs");
 const path = require("path");
 const crypto = require("crypto");
+const vectors = require("./vectors.js");
 
 const LOCAL = process.env.UPLOADS_FILE || path.join(__dirname, "data", "uploads.json");
 const KEY = "sources";
@@ -71,6 +72,8 @@ async function adminApi(method, body, id, password) {
   if (!expected) return { status: 503, json: { error: "Server chưa cấu hình ADMIN_PASSWORD" } };
   if (!samePassword(password || "", expected)) return { status: 401, json: { error: "Sai mật khẩu quản trị" } };
   const list = await loadSources();
+  // GET ?id=stats: thống kê Vector DB cho trang admin (id thật là chuỗi ngẫu nhiên nên không trùng).
+  if (method === "GET" && id === "stats") return { status: 200, json: await vectors.stats().catch((e) => ({ enabled: false, error: e.message })) };
   if (method === "GET") return { status: 200, json: list.map(summary) };
   if (method === "POST") {
     let input;
@@ -79,12 +82,20 @@ async function adminApi(method, body, id, password) {
     if (!src.documents.length && !src.intents.length) return { status: 400, json: { error: "File không có nội dung dùng được" } };
     list.push(src);
     await saveSources(list);
-    return { status: 200, json: summary(src) };
+    // Giai đoạn 1 của RAG: chunk -> embedding -> lưu Vector DB. Lỗi thì vẫn giữ tài liệu (bot tra bằng TF-IDF).
+    try {
+      const n = await vectors.indexChunks(vectors.toChunks(src.id, src.documents, src.intents));
+      return { status: 200, json: { ...summary(src), vectors: n } };
+    } catch (e) {
+      console.error("Không nhúng được vector:", e.message);
+      return { status: 200, json: { ...summary(src), vectors: 0, warning: "Đã lưu tài liệu nhưng chưa tạo được vector: " + e.message } };
+    }
   }
   if (method === "DELETE") {
     const next = list.filter((s) => s.id !== id);
     if (next.length === list.length) return { status: 404, json: { error: "Không tìm thấy tài liệu" } };
     await saveSources(next);
+    await vectors.deleteSource(id).catch((e) => console.error("Không xóa được vector:", e.message));
     return { status: 200, json: { ok: true } };
   }
   return { status: 405, json: { error: "Phương thức không hỗ trợ" } };

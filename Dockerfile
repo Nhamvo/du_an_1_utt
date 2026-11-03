@@ -8,7 +8,7 @@ ENV NODE_ENV=production PORT=8088 UPLOADS_FILE=/app/uploads/uploads.json
 COPY package.json package-lock.json ./
 RUN npm ci --omit=dev && npm cache clean --force
 
-COPY index.html admin.html bot.js rag.js store.js server.js ./
+COPY index.html admin.html bot.js rag.js store.js vectors.js server.js ./
 COPY data/knowledge.json data/knowledge.json
 
 # Dữ liệu upload từ trang admin -> /app/uploads; gắn volume vào đây để không mất khi tạo lại container.

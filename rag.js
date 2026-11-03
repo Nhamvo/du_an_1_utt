@@ -1,10 +1,10 @@
-// Pipeline LLM + RAG (chạy phía server, giữ API key bí mật):
-//   1. Mô hình học máy đã huấn luyện (bot.js) chặn câu nhạy cảm / ngoài phạm vi.
-//   2. Retrieval: lấy các ý định khớp nhất + các đoạn tài liệu gần nhất.
-//   3. Augmentation: ghép tài liệu vào prompt.  4. Generation: Gemini viết câu trả lời.
-// Gemini lỗi hoặc quá thời gian -> trả câu trả lời mẫu của mô hình đã huấn luyện.
+// Pipeline RAG chuẩn (chạy phía server, giữ API key bí mật):
+//   Giai đoạn 1 (chuẩn bị): kho tri thức -> chunking -> embedding -> Vector DB (vectors.js).
+//   Giai đoạn 2 (khi hỏi): câu hỏi -> embedding -> Vector DB tìm Top-k -> ghép prompt -> LLM (Gemini) trả lời.
+// Mô hình học máy TF-IDF + KNN (bot.js): chặn câu nhạy cảm, gắn ý định, và dự phòng khi Vector DB/Gemini lỗi.
 const { Bot, THRESHOLD } = require("./bot.js");
 const { loadSources, mergeKb } = require("./store.js");
+const vectors = require("./vectors.js");
 const baseKb = require("./data/knowledge.json");
 
 // Tri thức = file gốc + dữ liệu admin upload; chỉ huấn luyện lại khi danh sách upload thay đổi.
@@ -17,6 +17,34 @@ async function getBot() {
     cache = { key, kb, bot: new Bot(kb) };
   }
   return cache;
+}
+
+// Đảm bảo dữ liệu gốc đã có trong Vector DB (chỉ nhúng lại khi knowledge.json đổi).
+let baseSynced;
+function syncBaseOnce() {
+  baseSynced ??= vectors.syncBase(baseKb).catch((e) => { baseSynced = undefined; throw e; });
+  return baseSynced;
+}
+
+// Retriever: ưu tiên Vector DB (tìm theo nghĩa); không có hoặc lỗi -> TF-IDF (tìm theo từ).
+async function retrieve(bot, message, top) {
+  try {
+    if (await syncBaseOnce()) {
+      const hits = await vectors.search(message, 5);
+      if (hits && hits.length) {
+        const relevant = hits.filter((h) => h.score >= 0.55);
+        return {
+          context: relevant.map((h) => `[${h.title} – nguồn: ${h.source}]\n${h.content}`).join("\n\n"),
+          sources: [...new Set(relevant.map((h) => h.source).filter(Boolean))],
+          docs: relevant.map((h) => `${h.title} (${h.score.toFixed(2)})`),
+          retriever: "vector",
+        };
+      }
+    }
+  } catch (e) {
+    console.error("Vector DB lỗi, dùng TF-IDF:", e.message);
+  }
+  return { ...buildContext(bot, message, top), retriever: "tfidf" };
 }
 const MODEL = process.env.GEMINI_MODEL || "gemini-3.5-flash-lite";
 // Netlify (gói free) cắt function sau 10 giây -> đặt GEMINI_TIMEOUT_MS=9000 trên Netlify.
@@ -75,14 +103,14 @@ async function chat(message, history = []) {
   // Chỉ chặn cứng câu có từ nhạy cảm; mọi câu khác (kể cả "hihi", "quan tâm", câu lạc đề) để Gemini hiểu và
   // tự quyết định trò chuyện, hỏi lại hay từ chối. Mô hình học máy lo truy xuất tài liệu và dự phòng khi Gemini lỗi.
   if (!top.intent || top.intent === "nhay_cam") return { ...top, mode: "rule", sources: [] };
-  const { context, sources, docs } = buildContext(bot, message, top);
+  const { context, sources, docs, retriever } = await retrieve(bot, message, top);
   try {
     const { text, model } = await askGemini(message, Array.isArray(history) ? history : [], context);
     const intent = top.intent === "ngoai_pham_vi" ? "tro_chuyen" : top.intent;
-    return { answer: text, intent, score: top.score, sources, docs, mode: "llm", model };
+    return { answer: text, intent, score: top.score, sources, docs, retriever, mode: "llm", model };
   } catch (e) {
     console.error("Gemini lỗi, dùng câu trả lời mẫu:", e.message);
-    return { ...top, sources: top.source ? [top.source] : [], docs, mode: "ml", error: e.message };
+    return { ...top, sources: top.source ? [top.source] : [], docs, retriever, mode: "ml", error: e.message };
   }
 }
 

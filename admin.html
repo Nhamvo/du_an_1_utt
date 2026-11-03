@@ -111,7 +111,7 @@
   <main id="app" hidden>
     <section class="card">
       <h2>Tri thức hiện tại của chatbot</h2>
-      <p>Gồm dữ liệu gốc (thông báo tuyển sinh 2026) và các tài liệu đã upload.</p>
+      <p>Gồm dữ liệu gốc (thông báo tuyển sinh 2026) và các tài liệu đã upload. Mỗi đoạn được nhúng thành vector (Embedding) và lưu trong Vector DB để tìm theo nghĩa.</p>
       <div class="stats" id="stats"></div>
     </section>
 
@@ -209,9 +209,12 @@
       const upInt = kb.intents.filter((i) => i.tag.startsWith("up_")).length;
       const upDoc = kb.documents.filter((d) => d.source.startsWith("Tài liệu upload")).length;
       const samples = kb.intents.reduce((a, i) => a + i.patterns.length, 0);
+      const vs = await api("GET", null, "stats").catch(() => ({ enabled: false }));
       $("stats").innerHTML = [
         [kb.intents.length, `ý định (${upInt} từ upload)`], [samples, "câu mẫu huấn luyện"],
         [kb.documents.length, `đoạn tài liệu RAG (${upDoc} từ upload)`],
+        vs.enabled ? [vs.vectors, `vector ${vs.dims} chiều trong Vector DB (${esc(vs.model)}, pgvector)`]
+          : ["–", "Vector DB chưa bật: bot tìm tài liệu bằng TF-IDF"],
       ].map(([n, t]) => `<div class="stat"><b>${n}</b><span>${t}</span></div>`).join("");
     } catch { $("stats").innerHTML = '<div class="empty">Không tải được thống kê.</div>'; }
   }
@@ -370,7 +373,7 @@
     const payload = { name: p.name, type: p.type, intents: p.intents, documents: p.documents };
     if (JSON.stringify(payload).length > MAX_PAYLOAD) { p.status = "error"; p.error = "Nội dung quá dài, hãy chia file nhỏ hơn"; return; }
     p.status = "saving"; renderPending();
-    try { await api("POST", payload); pending.splice(pending.indexOf(p), 1); toast(`Đã lưu "${p.name}"`); }
+    try { const r = await api("POST", payload); pending.splice(pending.indexOf(p), 1); toast(r.warning || `Đã lưu "${p.name}" · ${r.vectors} vector`); }
     catch (err) { p.status = "error"; p.error = err.message; }
   }
   $("pending").onclick = async (e) => {
