@@ -4,3 +4,4 @@ node_modules/
 dist/
 data/uploads.json
 .DS_Store
+data/uploads-vectors.json

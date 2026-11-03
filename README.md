@@ -61,6 +61,10 @@ Ví dụ tìm theo nghĩa: "tiền học mỗi kỳ" → đoạn "học phí" (�
 | Học máy (dự phòng, chặn nhạy cảm, gắn ý định) | TF-IDF + KNN tự viết | `bot.js` |
 
 - **Dữ liệu** (`data/knowledge.json`): 29 ý định, 383 câu mẫu huấn luyện, 14 đoạn tài liệu → 43 vector trong Vector DB.
+- **Dữ liệu đã nhúng sẵn có trong Git**:
+  - `data/vectors.json`: 43 vector 768 chiều. Chạy local không có database thì server dùng luôn file này làm vector store (vẫn tìm theo nghĩa). Có database thì nạp thẳng vào Vector DB, không phải gọi Gemini nhúng lại.
+  - `data/vectors.sql`: dump PostgreSQL + pgvector (tạo bảng + 43 dòng vector), nạp vào database bất kỳ bằng `psql "<chuỗi kết nối>" -f data/vectors.sql`.
+  - Sửa `knowledge.json` thì chạy `npm run vectors` để tạo lại 2 file này.
 - API key Gemini và kết nối database chỉ nằm phía server, không lộ ra trình duyệt.
 
 ---
@@ -112,6 +116,9 @@ Mỗi đoạn / cặp hỏi–đáp vừa lưu được **nhúng vector và ghi 
 │   ├── kb.mjs                 GET  /api/kb   (tri thức hiện tại)
 │   └── admin.mjs              GET/POST/DELETE /api/admin
 ├── data/knowledge.json        Dữ liệu huấn luyện gốc + tài liệu RAG
+├── data/vectors.json          43 vector đã nhúng sẵn (vector store dạng file)
+├── data/vectors.sql           Dump PostgreSQL + pgvector của Vector DB
+├── scripts/build-vectors.js   npm run vectors: nhúng lại dữ liệu gốc, xuất 2 file trên
 ├── test.js                    Kiểm thử
 ├── build.js                   Đóng gói dist/ để deploy
 ├── Dockerfile                 Đóng gói Docker image
@@ -130,7 +137,20 @@ npm test
 npm start                 # http://localhost:8088  –  admin: http://localhost:8088/admin
 ```
 
-Không có `GEMINI_API_KEY` thì chatbot vẫn chạy, trả lời bằng mô hình học máy.
+| Có gì trong `.env` | Chatbot chạy thế nào |
+|---|---|
+| Không có gì | Học máy TF-IDF + KNN trả lời câu soạn sẵn |
+| `GEMINI_API_KEY` | **Đủ RAG**: Embedding câu hỏi + tìm theo nghĩa trên 43 vector có sẵn trong `data/vectors.json` + LLM Gemini |
+| `GEMINI_API_KEY` + `NETLIFY_DB_URL` | Như trên nhưng Vector DB là PostgreSQL + pgvector (Netlify Database) |
+
+Muốn có Vector DB PostgreSQL riêng trên máy, nạp sẵn dữ liệu:
+
+```bash
+docker run -d --name chatbot-pgvector -e POSTGRES_PASSWORD=postgres -p 5432:5432 pgvector/pgvector:pg17
+docker exec -i chatbot-pgvector psql -U postgres < data/vectors.sql
+```
+
+(Server hiện kết nối database qua HTTP API của Neon/Netlify Database; PostgreSQL chạy bằng Docker dùng để xem, truy vấn và demo dữ liệu vector bằng SQL.)
 
 ## Chạy bằng Docker
 

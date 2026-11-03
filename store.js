@@ -73,7 +73,7 @@ async function adminApi(method, body, id, password) {
   if (!samePassword(password || "", expected)) return { status: 401, json: { error: "Sai mật khẩu quản trị" } };
   const list = await loadSources();
   // GET ?id=stats: thống kê Vector DB cho trang admin (id thật là chuỗi ngẫu nhiên nên không trùng).
-  if (method === "GET" && id === "stats") return { status: 200, json: await vectors.stats().catch((e) => ({ enabled: false, error: e.message })) };
+  if (method === "GET" && id === "stats") return { status: 200, json: await vectors.stats(require("./data/knowledge.json")).catch((e) => ({ enabled: false, error: e.message })) };
   if (method === "GET") return { status: 200, json: list.map(summary) };
   if (method === "POST") {
     let input;

@@ -4,7 +4,8 @@
   "scripts": {
     "test": "node test.js",
     "build": "node build.js",
-    "start": "node server.js"
+    "start": "node server.js",
+    "vectors": "node scripts/build-vectors.js"
   },
   "dependencies": {
     "@netlify/blobs": "11.1.4",

@@ -30,7 +30,7 @@ function syncBaseOnce() {
 async function retrieve(bot, message, top) {
   try {
     if (await syncBaseOnce()) {
-      const hits = await vectors.search(message, 5);
+      const hits = await vectors.search(message, 5, baseKb);
       if (hits && hits.length) {
         const relevant = hits.filter((h) => h.score >= 0.55);
         return {
