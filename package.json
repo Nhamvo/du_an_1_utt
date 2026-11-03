@@ -4,7 +4,7 @@
   "scripts": {
     "test": "node test.js",
     "build": "node build.js",
-    "start": "node --env-file=.env server.js"
+    "start": "node server.js"
   },
   "dependencies": {
     "@netlify/blobs": "11.1.4"

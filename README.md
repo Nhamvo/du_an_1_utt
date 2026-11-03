@@ -98,11 +98,11 @@ Mở `/admin`, đăng nhập bằng mật khẩu quản trị (`ADMIN_PASSWORD`)
 
 ## Chạy trên máy
 
-Yêu cầu Node.js 20 trở lên.
+Yêu cầu Node.js 20.12 trở lên. Không có `.env` vẫn chạy được: chatbot trả lời bằng học máy, trang admin cần `ADMIN_PASSWORD` mới đăng nhập được.
 
 ```bash
 npm install
-cp .env.example .env      # rồi điền GEMINI_API_KEY và ADMIN_PASSWORD
+cp .env.example .env      # tùy chọn: điền GEMINI_API_KEY (bật AI) và ADMIN_PASSWORD (bật trang admin)
 npm test
 npm start                 # http://localhost:8088  –  admin: http://localhost:8088/admin
 ```

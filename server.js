@@ -1,4 +1,6 @@
-// Chạy local: node --env-file=.env server.js  ->  http://localhost:8088  (trang admin: /admin)
+// Chạy local: npm start  ->  http://localhost:8088  (trang admin: /admin)
+// Đọc .env nếu có; chưa có thì vẫn chạy (chatbot dùng học máy, trang admin báo thiếu mật khẩu).
+try { process.loadEnvFile(); } catch {}
 const http = require("http");
 const fs = require("fs");
 const path = require("path");
